@@ -1,6 +1,13 @@
+import Navbar from "./components/shared/Navbar"
+
 function App() {
   return (
-    <h1>Welcome to real estate</h1>
+    <>
+      <Navbar />
+      <h1 className="text-3xl font-bold underline">
+        Hello world!
+      </h1>
+    </>
   )
 }
 
