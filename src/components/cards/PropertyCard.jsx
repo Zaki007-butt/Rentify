@@ -1,6 +1,6 @@
 import React from 'react'
 
-const PropertyCard = () => {
+const PropertyCard = ({id, title, description, price, address}) => {
   return (
     <div class="relative mx-auto w-full">
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous" />
@@ -30,15 +30,15 @@ const PropertyCard = () => {
           </div>
 
           <div class="mt-4">
-            <h2 class="line-clamp-1 text-2xl font-medium text-gray-800 md:text-lg" title="New York">1000 yards (Brand New) Bungalow Available in...</h2>
+            <h2 class="line-clamp-1 text-2xl font-medium text-gray-800 md:text-lg" title="New York">{ title }</h2>
 
             <p class="text-primary mt-2 inline-block whitespace-nowrap rounded-xl font-semibold leading-tight">
               <span class="text-sm uppercase"> PKR </span>
-              <span class="text-2xl">3,200,000,000</span>/Sqft
+              <span class="text-2xl">{ price }</span>
             </p>
           </div>
           <div class="mt-4">
-            <p class="line-clamp-1 mt-2 text-lg text-gray-800">6 bedrooms Architect designed Imported fixtures and fittings Full basement Top of the [more]</p>
+            <p class="line-clamp-1 mt-2 text-lg text-gray-800">{ description }</p>
           </div>
           <div class="justify-center">
             <div class="mt-4 flex space-x-3 overflow-hidden rounded-lg px-1 py-1">
