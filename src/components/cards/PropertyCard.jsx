@@ -1,6 +1,6 @@
 import React from 'react'
 
-const PropertyCard = ({ id, title, description, price, address, bedroom, washroom, area }) => {
+const PropertyCard = ({ id, title, description, price, address, bedroom, washroom, area, property_category_name }) => {
   return (
     <div class="relative mx-auto w-full">
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous" />
@@ -25,7 +25,11 @@ const PropertyCard = ({ id, title, description, price, address, bedroom, washroo
               </p>
             </div>
 
-            <span class="absolute top-0 right-2 z-10 mt-3 ml-3 inline-flex select-none rounded-sm bg-[#1f93ff] px-2 py-1 text-xs font-semibold text-white"> Commercial </span>
+            {
+              property_category_name && <span class="absolute top-0 right-2 z-10 mt-3 ml-3 inline-flex select-none rounded-sm bg-[#1f93ff] px-2 py-1 text-xs font-semibold text-white">
+              {property_category_name} </span>
+            }
+
             <span class="absolute top-0 left-0 z-10 mt-3 ml-3 inline-flex select-none rounded-lg bg-transparent px-3 py-2 text-lg font-medium text-white"> <i class="fa fa-star"></i> </span>
           </div>
 

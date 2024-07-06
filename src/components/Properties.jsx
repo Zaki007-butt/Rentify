@@ -22,6 +22,7 @@ const Properties = () => {
             bedroom={property.bedroom}
             washroom={property.washroom}
             area={property.area}
+            property_category_name={property.property_category_name}
           />
         ))
       }
