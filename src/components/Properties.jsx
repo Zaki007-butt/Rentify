@@ -19,6 +19,9 @@ const Properties = () => {
             description={property.description}
             price={property.price}
             address={property.address}
+            bedroom={property.bedroom}
+            washroom={property.washroom}
+            area={property.area}
           />
         ))
       }
