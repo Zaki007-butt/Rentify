@@ -1,5 +1,11 @@
 import axios from "axios"
+import { BASE_URL } from "../config/config"
 
 export const getProperties = () => {
-  return axios.get('http://127.0.0.1:8000/api/v1/properties/')
+  return axios.get(`${BASE_URL}/properties/`)
+}
+
+export const getPropertiesCategories = async () => {
+  const { data } = await axios.get(`${BASE_URL}/categories/`)
+  return data
 }
