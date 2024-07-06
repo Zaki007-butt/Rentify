@@ -1,11 +1,12 @@
 import React from 'react'
 import PropertyCard from '../components/cards/PropertyCard'
-import { useGetProperties } from '../react-query/queries/property.queries'
+import { useGetProperties, useGetPropertiesCategories } from '../react-query/queries/property.queries'
 import Dropdown from '../components/shared/Dropdown'
 
 const Properties = () => {
   const { data: response, isPending } = useGetProperties()
-
+  const { data: categories } = useGetPropertiesCategories()
+  
   if (isPending) {
     return <h1>Loading...</h1>
   }
@@ -13,8 +14,7 @@ const Properties = () => {
   return (
     <div className='container mx-auto'>
       <div className="flex">
-        <Dropdown filterField="Category"/>
-        <Dropdown filterField="Type"/>
+        <Dropdown filterField="Category" list={categories} />
       </div>
       <div class="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {
