@@ -1,6 +1,6 @@
 import React from 'react'
-import PropertyCard from '../cards/PropertyCard'
-import { useGetProperties } from '../../react-query/queries/property.queries'
+import PropertyCard from '../components/cards/PropertyCard'
+import { useGetProperties } from '../react-query/queries/property.queries'
 
 const Properties = () => {
   const { data: response, isPending } = useGetProperties()

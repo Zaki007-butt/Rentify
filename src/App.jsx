@@ -1,5 +1,5 @@
 
-import Properties from "./components/pages/Properties"
+import Properties from "./pages/Properties"
 import Navbar from "./components/shared/Navbar"
 
 function App() {
