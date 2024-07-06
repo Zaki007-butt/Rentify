@@ -1,12 +1,12 @@
 
-import Properties from "./components/Properties"
+import Properties from "./pages/Properties"
 import Navbar from "./components/shared/Navbar"
 
 function App() {
   return (
     <>
       <Navbar />
-      <Properties/>
+      <Properties />
     </>
   )
 }
