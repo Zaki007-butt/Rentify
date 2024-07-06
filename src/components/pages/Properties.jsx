@@ -1,10 +1,10 @@
 import React from 'react'
-import PropertyCard from './cards/PropertyCard'
-import { useGetProperties } from '../react-query/queries/property.queries'
+import PropertyCard from '../cards/PropertyCard'
+import { useGetProperties } from '../../react-query/queries/property.queries'
 
 const Properties = () => {
   const { data: response, isPending } = useGetProperties()
- 
+
   if (isPending) {
     return <h1>Loading...</h1>
   }
