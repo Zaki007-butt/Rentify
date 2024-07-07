@@ -4,6 +4,7 @@ import { useGetProperties, useGetPropertiesCategories } from '../react-query/que
 import Dropdown from '../components/shared/Dropdown'
 import { useSearchParams } from 'react-router-dom'
 import SearchBar from '../components/shared/SearchBar'
+import Loader from '../components/shared/Loader'
 
 const Properties = () => {
   let [searchParams, setSearchParams] = useSearchParams();
@@ -26,10 +27,6 @@ const Properties = () => {
   const updateSearchKeyword = (search) => {
     setSearchKeyword(search)
     setSearchParams({ "search": search })
-  }
-  
-  if (isPending) {
-    return <h1>Loading...</h1>
   }
 
   return (
@@ -59,6 +56,11 @@ const Properties = () => {
           ))
         }
       </div>
+      {
+        isPending && <div className='flex justify-center items-center w-full h-[80vh]'>
+          <Loader />
+        </div>
+      }
     </div>
   )
 }
