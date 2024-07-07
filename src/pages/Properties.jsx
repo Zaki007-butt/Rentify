@@ -2,14 +2,17 @@ import React, { useState } from 'react'
 import PropertyCard from '../components/cards/PropertyCard'
 import { useGetProperties, useGetPropertiesCategories } from '../react-query/queries/property.queries'
 import Dropdown from '../components/shared/Dropdown'
+import { useSearchParams } from 'react-router-dom'
 
 const Properties = () => {
-  const [categoryID, setCategoryID] = useState()
+  let [searchParams, setSearchParams] = useSearchParams();
+  const [categoryID, setCategoryID] = useState(searchParams.get('category_id') || '')
   const { data: response, isPending } = useGetProperties(categoryID)
   const { data: categories } = useGetPropertiesCategories()
 
   const updateCategoryId = (ID) => {
     setCategoryID(ID)
+    setSearchParams({ "category_id": ID })
   }
   
   if (isPending) {

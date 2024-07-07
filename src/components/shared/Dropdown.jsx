@@ -7,6 +7,11 @@ const Dropdown = ({ filterField, list = [], setElement }) => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const handleSetElement = (id) => {
+    setElement(id);
+    setIsDropdownOpen(!isDropdownOpen);
+  }
+
   return (
     <div className="py-8 pr-2">
       <button
@@ -42,7 +47,7 @@ const Dropdown = ({ filterField, list = [], setElement }) => {
         </h6>
         <ul className="space-y-2 text-sm" aria-labelledby="dropdownDefault">
           {list.length > 0 && list.map(element => (
-            <li className="flex items-center" key={element.id} onClick={() => setElement(element.id)}>
+            <li className="flex items-center" key={element.id} onClick={() => handleSetElement(element.id)}>
               <span
                 className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100 cursor-pointer"
               >
