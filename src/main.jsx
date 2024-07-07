@@ -14,12 +14,14 @@ import {
 } from "react-router-dom";
 import Properties from './pages/Properties.jsx'
 import RootLayout from './components/layouts/RootLayout.jsx'
+import PropertyForm from './pages/PropertyForm.jsx'
 
 const queryClient = new QueryClient()
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/" element={<RootLayout />}>
     <Route index element={<Properties />} />
     <Route path="properties" element={<Properties />} />
+    <Route path="properties/create" element={<PropertyForm />} />
   </Route>
 ))
 
