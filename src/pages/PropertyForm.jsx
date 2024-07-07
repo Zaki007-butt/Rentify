@@ -1,16 +1,18 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useCreatePropertyMutation } from '../react-query/mutations/property.mutation';
+import { useGetPropertiesCategories } from '../react-query/queries/property.queries';
 import { useNavigate } from 'react-router-dom';
 
 const PropertyForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const { mutateAsync } = useCreatePropertyMutation()
-  const navigate = useNavigate()
+  const { mutateAsync } = useCreatePropertyMutation();
+  const { data: categories, isLoading: isLoadingCategories } = useGetPropertiesCategories();
+  const navigate = useNavigate();
 
   const onSubmit = async (formData) => {
-    await mutateAsync(formData)
-    navigate('/')
+    await mutateAsync(formData);
+    navigate('/');
   };
 
   return (
@@ -81,8 +83,10 @@ const PropertyForm = () => {
             {errors.washroom && <span className="text-red-500">{errors.washroom.message}</span>}
           </div>
 
-          <div>
-            <label htmlFor="area" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Area (sqft)</label>
+        </div>
+
+        <div className='mt-2'>
+            <label htmlFor="area" className="my-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Area (sqft)</label>
             <input
               id="area"
               type="number"
@@ -92,8 +96,24 @@ const PropertyForm = () => {
             />
             {errors.area && <span className="text-red-500">{errors.area.message}</span>}
           </div>
-        </div>
 
+        <label htmlFor="property_category" className="mb-2 mt-4 text-sm font-medium text-gray-900 sr-only dark:text-white">Property Category</label>
+        <select
+          id="property_category"
+          {...register('property_category', { required: 'Property category is required' })}
+          className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        >
+          {isLoadingCategories ? (
+            <option>Loading...</option>
+          ) : (
+            categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))
+          )}
+        </select>
+        {errors.property_category && <span className="text-red-500">{errors.property_category.message}</span>}
         <button
           type="submit"
           className="mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
