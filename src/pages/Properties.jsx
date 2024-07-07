@@ -3,6 +3,7 @@ import PropertyCard from '../components/cards/PropertyCard'
 import { useGetProperties, useGetPropertiesCategories } from '../react-query/queries/property.queries'
 import Dropdown from '../components/shared/Dropdown'
 import { useSearchParams } from 'react-router-dom'
+import SearchBar from '../components/shared/SearchBar'
 
 const Properties = () => {
   let [searchParams, setSearchParams] = useSearchParams();
@@ -27,8 +28,9 @@ const Properties = () => {
 
   return (
     <div className='container mx-auto'>
-      <div className="flex">
+      <div className="flex items-center justify-between w-full">
         <Dropdown filterField="Category" list={categories} setElement={updateCategoryId} />
+        <SearchBar />
       </div>
       <div class="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {
