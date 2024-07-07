@@ -7,7 +7,7 @@ const RootLayout = () => {
   return (
     <>
       <Navbar />
-      <div className="pt-16">
+      <div className="container mx-auto pt-16">
         <Outlet />
       </div>
       <Footer />

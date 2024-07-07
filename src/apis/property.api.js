@@ -9,7 +9,7 @@ export const getProperties = (categoryID, searchKeyword) => {
   if (searchKeyword) {
     URL = `${BASE_URL}/properties/?search=${searchKeyword}`
   }
-  if (categoryID &&  searchKeyword) {
+  if (categoryID && searchKeyword) {
     URL = `${BASE_URL}/properties/?search=${searchKeyword}&&category_id=${categoryID}`
   }
   return axios.get(URL)
@@ -18,4 +18,17 @@ export const getProperties = (categoryID, searchKeyword) => {
 export const getPropertiesCategories = async () => {
   const { data } = await axios.get(`${BASE_URL}/categories/`)
   return data
+}
+
+export const getPropertiesCategoryTypes = async (categoryId) => {
+  const { data } = await axios.get(`${BASE_URL}/categories/${categoryId}/types/`);
+  return data;
+};
+
+export const createProperty = async (propertyData) => {
+  let data = {
+    ...propertyData
+  }
+  const response = await axios.post(`${BASE_URL}/properties/`, data);
+  return response;
 }
