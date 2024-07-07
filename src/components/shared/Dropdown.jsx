@@ -55,6 +55,13 @@ const Dropdown = ({ filterField, list = [], setElement }) => {
               </span>
             </li>
           ))}
+          <li className="flex items-center" onClick={() => handleSetElement()}>
+              <span
+                className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100 cursor-pointer"
+              >
+                Reset Category
+              </span>
+            </li>
         </ul>
       </div>
     </div>

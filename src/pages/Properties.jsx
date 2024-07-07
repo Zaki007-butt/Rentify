@@ -11,8 +11,14 @@ const Properties = () => {
   const { data: categories } = useGetPropertiesCategories()
 
   const updateCategoryId = (ID) => {
-    setCategoryID(ID)
-    setSearchParams({ "category_id": ID })
+    if (ID) {
+      setCategoryID(ID)
+      setSearchParams({ "category_id": ID })
+    } else {
+      searchParams.delete('category_id')
+      setSearchParams(searchParams)
+      setCategoryID('')
+    }
   }
   
   if (isPending) {
