@@ -1,19 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCreatePropertyMutation } from '../react-query/mutations/property.mutation';
 import { useGetPropertiesCategories } from '../react-query/queries/property.queries';
+import { useGetPropertyTypesQuery } from '../react-query/queries/property.queries';
 import { useNavigate } from 'react-router-dom';
 
 const PropertyForm = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, watch } = useForm();
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const { mutateAsync } = useCreatePropertyMutation();
   const { data: categories, isLoading: isLoadingCategories } = useGetPropertiesCategories();
+  const { data: propertyTypes, isLoading: isLoadingPropertyTypes } = useGetPropertyTypesQuery(selectedCategory, !!selectedCategory);
   const navigate = useNavigate();
 
   const onSubmit = async (formData) => {
     await mutateAsync(formData);
     navigate('/');
   };
+
+  // Watch the selected category
+  const watchCategory = watch('property_category');
+  useEffect(() => {
+    if (watchCategory) {
+      setSelectedCategory(watchCategory);
+    }
+  }, [watchCategory]);
 
   return (
     <div className='flex items-center justify-center flex-col'>
@@ -114,6 +125,26 @@ const PropertyForm = () => {
           )}
         </select>
         {errors.property_category && <span className="text-red-500">{errors.property_category.message}</span>}
+
+        <label htmlFor="property_type" className="mb-2 mt-4 text-sm font-medium text-gray-900 sr-only dark:text-white">Property Type</label>
+        <select
+          id="property_type"
+          {...register('property_type', { required: 'Property type is required' })}
+          className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          disabled={!selectedCategory}
+        >
+          {isLoadingPropertyTypes ? (
+            <option>Loading...</option>
+          ) : (
+            propertyTypes && propertyTypes.map((type) => (
+              <option key={type.id} value={type.id}>
+                {type.name}
+              </option>
+            ))
+          )}
+        </select>
+        {errors.property_type && <span className="text-red-500">{errors.property_type.message}</span>}
+
         <button
           type="submit"
           className="mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
