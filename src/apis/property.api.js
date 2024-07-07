@@ -22,10 +22,7 @@ export const getPropertiesCategories = async () => {
 
 export const createProperty = async (propertyData) => {
   let data = {
-    title: propertyData.title,
-    description: propertyData.description,
-    price: propertyData.price,
-    address: propertyData.address
+    ...propertyData
   }
   const response = await axios.post(`${BASE_URL}/properties/`, data);
   return response;

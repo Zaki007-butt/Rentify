@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
 import './index.css'
 import {
   QueryClient,
@@ -16,7 +15,7 @@ import Properties from './pages/Properties.jsx'
 import RootLayout from './components/layouts/RootLayout.jsx'
 import PropertyForm from './pages/PropertyForm.jsx'
 
-const queryClient = new QueryClient()
+export const queryClient = new QueryClient()
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/" element={<RootLayout />}>
     <Route index element={<Properties />} />

@@ -1,13 +1,16 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { createProperty } from '../apis/property.api';
+import { useCreatePropertyMutation } from '../react-query/mutations/property.mutation';
+import { useNavigate } from 'react-router-dom';
 
 const PropertyForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const { mutateAsync } = useCreatePropertyMutation()
+  const navigate = useNavigate()
 
   const onSubmit = async (formData) => {
-    console.log("🚀 ~ onSubmit ~ formData:", formData)
-    createProperty(formData)
+    await mutateAsync(formData)
+    navigate('/')
   };
 
   return (
