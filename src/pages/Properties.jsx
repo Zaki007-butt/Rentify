@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropertyCard from '../components/cards/PropertyCard'
 import { useGetProperties, useGetPropertiesCategories } from '../react-query/queries/property.queries'
 import Dropdown from '../components/shared/Dropdown'
 
 const Properties = () => {
-  const { data: response, isPending } = useGetProperties()
+  const [categoryID, setCategoryID] = useState()
+  const { data: response, isPending } = useGetProperties(categoryID)
   const { data: categories } = useGetPropertiesCategories()
+
+  const updateCategoryId = (ID) => {
+    setCategoryID(ID)
+  }
   
   if (isPending) {
     return <h1>Loading...</h1>
@@ -14,11 +19,11 @@ const Properties = () => {
   return (
     <div className='container mx-auto'>
       <div className="flex">
-        <Dropdown filterField="Category" list={categories} />
+        <Dropdown filterField="Category" list={categories} setElement={updateCategoryId} />
       </div>
       <div class="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {
-          response.data.results.length > 0 && response.data.results.map(property => (
+          response?.data?.results?.length > 0 && response.data.results.map(property => (
             <PropertyCard
               id={property.id}
               title={property.title}

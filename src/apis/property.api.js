@@ -1,8 +1,13 @@
 import axios from "axios"
 import { BASE_URL } from "../config/config"
 
-export const getProperties = () => {
-  return axios.get(`${BASE_URL}/properties/`)
+export const getProperties = (category_id) => {
+  let URL = `${BASE_URL}/properties/`
+  debugger
+  if (category_id) {
+    URL=`${BASE_URL}/properties/?category_id=${category_id}`
+  }
+  return axios.get(URL)
 }
 
 export const getPropertiesCategories = async () => {
