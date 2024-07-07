@@ -6,19 +6,18 @@ import { useGetPropertyTypesQuery } from '../react-query/queries/property.querie
 import { useNavigate } from 'react-router-dom';
 
 const PropertyForm = () => {
+  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const { mutateAsync } = useCreatePropertyMutation();
   const { data: categories, isLoading: isLoadingCategories } = useGetPropertiesCategories();
   const { data: propertyTypes, isLoading: isLoadingPropertyTypes } = useGetPropertyTypesQuery(selectedCategory, !!selectedCategory);
-  const navigate = useNavigate();
 
   const onSubmit = async (formData) => {
     await mutateAsync(formData);
     navigate('/');
   };
 
-  // Watch the selected category
   const watchCategory = watch('property_category');
   useEffect(() => {
     if (watchCategory) {
