@@ -8,7 +8,8 @@ import SearchBar from '../components/shared/SearchBar'
 const Properties = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   const [categoryID, setCategoryID] = useState(searchParams.get('category_id') || '')
-  const { data: response, isPending } = useGetProperties(categoryID)
+  const [searchKeyword, setSearchKeyword] = useState(searchParams.get('search') || '')
+  const { data: response, isPending } = useGetProperties(categoryID, searchKeyword)
   const { data: categories } = useGetPropertiesCategories()
 
   const updateCategoryId = (ID) => {
@@ -21,6 +22,11 @@ const Properties = () => {
       setCategoryID('')
     }
   }
+
+  const updateSearchKeyword = (search) => {
+    setSearchKeyword(search)
+    setSearchParams({ "search": search })
+  }
   
   if (isPending) {
     return <h1>Loading...</h1>
@@ -29,8 +35,12 @@ const Properties = () => {
   return (
     <div className='container mx-auto'>
       <div className="flex items-center justify-between w-full">
-        <Dropdown filterField="Category" list={categories} setElement={updateCategoryId} />
-        <SearchBar />
+        <Dropdown
+          filterField="Category"
+          list={categories}
+          setElement={updateCategoryId}
+        />
+        <SearchBar searchKeyword={searchKeyword} updateSearchKeyword={updateSearchKeyword} />
       </div>
       <div class="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {

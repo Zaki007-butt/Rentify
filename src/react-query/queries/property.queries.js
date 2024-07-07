@@ -4,10 +4,10 @@ import {
 import { getProperties, getPropertiesCategories } from '../../apis/property.api'
 import { QUERY_KEYS } from '../constants/keys'
 
-export const useGetProperties = (category_id) => {
+export const useGetProperties = (categoryID, searchKeyword) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.PROPERTIES, category_id],
-    queryFn: () => getProperties(category_id),
+    queryKey: [QUERY_KEYS.PROPERTIES, categoryID, searchKeyword],
+    queryFn: () => getProperties(categoryID, searchKeyword),
     staleTime: 20 * 1000
   })
 }
