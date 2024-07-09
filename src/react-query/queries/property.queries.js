@@ -24,7 +24,8 @@ export const useGetPropertyTypesQuery = (categoryID) => {
   return useQuery({
     queryKey: [QUERY_KEYS.PROPERTIES_CATEGORIES_TYPE, categoryID],
     queryFn: () => getPropertiesCategoryTypes(categoryID),
-    staleTime: 50 * 1000
+    staleTime: 50 * 1000,
+    enabled: !!categoryID
   })
 }
 
