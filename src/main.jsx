@@ -14,12 +14,14 @@ import {
 import Properties from './pages/Properties.jsx'
 import RootLayout from './components/layouts/RootLayout.jsx'
 import PropertyForm from './pages/PropertyForm.jsx'
+import PropertyDetail from './pages/PropertyDetail.jsx';
 
 export const queryClient = new QueryClient()
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/" element={<RootLayout />}>
     <Route index element={<Properties />} />
     <Route path="properties" element={<Properties />} />
+    <Route path="properties/:id" element={<PropertyDetail />} />
     <Route path="properties/create" element={<PropertyForm />} />
   </Route>
 ))
