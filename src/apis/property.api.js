@@ -1,7 +1,7 @@
 import axios from "axios"
 import { BASE_URL } from "../config/config"
 
-export const getProperties = (categoryID, searchKeyword) => {
+export const getProperties = (categoryID, subcategoryID, searchKeyword) => {
   let URL = `${BASE_URL}/properties/`
   if (categoryID) {
     URL = `${BASE_URL}/properties/?category_id=${categoryID}`
@@ -9,8 +9,14 @@ export const getProperties = (categoryID, searchKeyword) => {
   if (searchKeyword) {
     URL = `${BASE_URL}/properties/?search=${searchKeyword}`
   }
+  if (categoryID && subcategoryID) {
+    URL = `${BASE_URL}/properties/?category_id=${categoryID}&&type_id=${subcategoryID}`
+  }
   if (categoryID && searchKeyword) {
     URL = `${BASE_URL}/properties/?search=${searchKeyword}&&category_id=${categoryID}`
+  }
+  if (categoryID && searchKeyword && subcategoryID) {
+    URL = `${BASE_URL}/properties/?search=${searchKeyword}&&category_id=${categoryID}&&type_id=${subcategoryID}`
   }
   return axios.get(URL)
 }
