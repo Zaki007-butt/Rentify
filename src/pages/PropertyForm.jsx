@@ -68,6 +68,16 @@ const PropertyForm = () => {
           placeholder="Address"
         />
         {errors.address && <span className="text-red-500">{errors.address.message}</span>}
+       
+        <label htmlFor="city" className="mb-2 mt-4 text-sm font-medium text-gray-900 sr-only dark:text-white">Address</label>
+        <input
+          id="city"
+          type="text"
+          {...register('city', { required: 'City is required', maxLength: { value: 255, message: 'City cannot exceed 255 characters' } })}
+          className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="City"
+        />
+        {errors.address && <span className="text-red-500">{errors.address.message}</span>}
 
         <div className="grid grid-cols-2 gap-4 mt-4">
           <div>
