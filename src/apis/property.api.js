@@ -25,6 +25,12 @@ export const getPropertiesCategoryTypes = async (categoryId) => {
   return data;
 };
 
+export const getSingleProperty = async (propertyID) => {
+  const { data } = await axios.get(`${BASE_URL}/properties/${propertyID}/`);
+  return data;
+};
+
+
 export const createProperty = async (propertyData) => {
   let data = {
     ...propertyData

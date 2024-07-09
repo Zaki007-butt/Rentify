@@ -9,7 +9,9 @@ const PropertyCard = ({ id, title, description, price, address, bedroom, washroo
           <div class="relative flex h-52 justify-center overflow-hidden rounded-lg">
             <div class="w-full transform transition-transform duration-500 ease-in-out hover:scale-110">
               <div class="absolute inset-0 bg-black bg-opacity-80">
-                <img src="https://assets.entrepreneur.com/content/3x2/2000/20150622231001-for-sale-real-estate-home-house.jpeg?crop=16:9" alt="" />
+                <img
+                  src="https://assets.entrepreneur.com/content/3x2/2000/20150622231001-for-sale-real-estate-home-house.jpeg?crop=16:9"
+                  alt="" />
               </div>
             </div>
 
