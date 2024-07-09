@@ -2,25 +2,23 @@ import axios from "axios"
 import { BASE_URL } from "../config/config"
 
 export const getProperties = (categoryID, subcategoryID, searchKeyword) => {
-  let URL = `${BASE_URL}/properties/`
+  let params = {};
+
   if (categoryID) {
-    URL = `${BASE_URL}/properties/?category_id=${categoryID}`
+    params['category_id'] = categoryID;
+  }
+  if (subcategoryID) {
+    params['type_id'] = subcategoryID;
   }
   if (searchKeyword) {
-    URL = `${BASE_URL}/properties/?search=${searchKeyword}`
+    params['search'] = searchKeyword;
   }
-  if (categoryID && subcategoryID) {
-    URL = `${BASE_URL}/properties/?category_id=${categoryID}&&type_id=${subcategoryID}`
-  }
-  if (categoryID && searchKeyword) {
-    URL = `${BASE_URL}/properties/?search=${searchKeyword}&&category_id=${categoryID}`
-  }
-  if (categoryID && searchKeyword && subcategoryID) {
-    URL = `${BASE_URL}/properties/?search=${searchKeyword}&&category_id=${categoryID}&&type_id=${subcategoryID}`
-  }
-  return axios.get(URL)
-}
 
+  const queryString = new URLSearchParams(params).toString();
+  const URL = `${BASE_URL}/properties/?${queryString}`;
+
+  return axios.get(URL);
+};
 export const getPropertiesCategories = async () => {
   const { data } = await axios.get(`${BASE_URL}/categories/`)
   return data
