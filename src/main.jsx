@@ -15,6 +15,8 @@ import Properties from './pages/Properties.jsx'
 import RootLayout from './components/layouts/RootLayout.jsx'
 import PropertyForm from './pages/PropertyForm.jsx'
 import PropertyDetail from './pages/PropertyDetail.jsx';
+import Register from './pages/Authentication/Register.jsx';
+import Login from './pages/Authentication/Login.jsx';
 
 export const queryClient = new QueryClient()
 const router = createBrowserRouter(createRoutesFromElements(
@@ -23,6 +25,8 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route path="properties" element={<Properties />} />
     <Route path="properties/:id" element={<PropertyDetail />} />
     <Route path="properties/create" element={<PropertyForm />} />
+    <Route path="users/register" element={<Register />} />
+    <Route path="users/login" element={<Login />} />
   </Route>
 ))
 
