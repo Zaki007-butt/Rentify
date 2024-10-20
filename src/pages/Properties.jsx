@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react'
 import PropertyCard from '../components/cards/PropertyCard'
 import {
   useGetProperties,
@@ -121,6 +121,7 @@ const Properties = () => {
                 washroom={property.washroom}
                 area={property.area}
                 property_category_name={property.property_category_name}
+                rent_or_buy={property.rent_or_buy}
               />
             </Link>
           ))

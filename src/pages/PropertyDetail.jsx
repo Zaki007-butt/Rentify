@@ -13,7 +13,7 @@ const PropertyDetail = () => {
   }
 
   return (
-    <div className='pt-20'>
+    <div className='pt-20 container mx-auto'>
       <button
         onClick={() => navigate(-1)}
         className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
@@ -22,23 +22,11 @@ const PropertyDetail = () => {
       </button>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <div>
-          <img className="h-auto max-w-full rounded-lg" src="https://assets.entrepreneur.com/content/3x2/2000/20150622231001-for-sale-real-estate-home-house.jpeg?crop=16:9" alt="" />
+      <div>
+          <img className="h-auto max-w-full rounded-lg" src="https://cdn.prod.website-files.com/660739d2e6e8ec9445dd91a2/66430dbcfc6b6bcdcdb8c334_What%20is%20a%20software%20house%20.webp" alt="" />
         </div>
         <div>
-          <img className="h-auto max-w-full rounded-lg" src="https://assets.entrepreneur.com/content/3x2/2000/20150622231001-for-sale-real-estate-home-house.jpeg?crop=16:9" alt="" />
-        </div>
-        <div>
-          <img className="h-auto max-w-full rounded-lg" src="https://assets.entrepreneur.com/content/3x2/2000/20150622231001-for-sale-real-estate-home-house.jpeg?crop=16:9" alt="" />
-        </div>
-        <div>
-          <img className="h-auto max-w-full rounded-lg" src="https://assets.entrepreneur.com/content/3x2/2000/20150622231001-for-sale-real-estate-home-house.jpeg?crop=16:9" alt="" />
-        </div>
-        <div>
-          <img className="h-auto max-w-full rounded-lg" src="https://assets.entrepreneur.com/content/3x2/2000/20150622231001-for-sale-real-estate-home-house.jpeg?crop=16:9" alt="" />
-        </div>
-        <div>
-          <img className="h-auto max-w-full rounded-lg" src="https://assets.entrepreneur.com/content/3x2/2000/20150622231001-for-sale-real-estate-home-house.jpeg?crop=16:9" alt="" />
+          <img className="h-auto max-w-full rounded-lg" src="https://www.shutterstock.com/image-vector/real-estate-3d-icon-house-260nw-2281376283.jpg" alt="" />
         </div>
       </div>
 
@@ -64,7 +52,7 @@ const PropertyDetail = () => {
               </div>}
               {property.area && <div className="w-1/2 mt-2">
                 <p className="text-gray-600">
-                  <span className="font-semibold">Area:</span> {property.area} sq ft
+                  <span className="font-semibold">Area:</span> {property.area} Yard sq
                 </p>
               </div>}
               {property.property_category_name && <div className="w-1/2 mt-2">

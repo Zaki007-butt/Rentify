@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCreatePropertyMutation } from '../react-query/mutations/property.mutation';
 import { useGetPropertiesCategories } from '../react-query/queries/property.queries';
@@ -52,7 +52,7 @@ const PropertyForm = () => {
         <label htmlFor="price" className="mb-2 mt-4 text-sm font-medium text-gray-900 sr-only dark:text-white">Price</label>
         <input
           id="price"
-          type="number"
+          type="text"
           {...register('price', { required: 'Price is required', min: { value: 0.01, message: 'Price must be greater than 0' } })}
           className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Price"
@@ -91,7 +91,8 @@ const PropertyForm = () => {
             />
             {errors.bedroom && <span className="text-red-500">{errors.bedroom.message}</span>}
           </div>
-
+          <div>
+          </div>
           <div>
             <label htmlFor="washroom" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Washroom</label>
             <input
@@ -113,7 +114,7 @@ const PropertyForm = () => {
             type="number"
             {...register('area', { min: { value: 0, message: 'Area must be greater than 0' } })}
             className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Area (sqft)"
+            placeholder="Area (yard sq)"
           />
           {errors.area && <span className="text-red-500">{errors.area.message}</span>}
         </div>

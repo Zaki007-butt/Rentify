@@ -1,6 +1,6 @@
 import React from 'react'
 
-const PropertyCard = ({ id, title, description, price, address, bedroom, washroom, area, property_category_name }) => {
+const PropertyCard = ({ id, title, description, price, address, bedroom, washroom, area, property_category_name, rent_or_buy }) => {
   return (
     <div class="relative mx-auto w-full">
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous" />
@@ -46,6 +46,9 @@ const PropertyCard = ({ id, title, description, price, address, bedroom, washroo
           <div class="mt-4">
             <p class="line-clamp-1 mt-2 text-lg text-gray-800">{description}</p>
           </div>
+          <div class="mt-4">
+            <p class="line-clamp-1 mt-2 text-lg text-gray-800"><strong style={{fontSize : 30}}>{rent_or_buy}</strong></p>
+          </div>
           <div class="justify-center">
             <div class="mt-4 flex space-x-3 overflow-hidden rounded-lg px-1 py-1">
               {
@@ -76,7 +79,7 @@ const PropertyCard = ({ id, title, description, price, address, bedroom, washroo
                 <span class="bg-primary-red absolute top-0 right-0 inline-block h-3 w-3 rounded-full"></span>
               </div>
 
-              <p class="line-clamp-1 ml-2 text-gray-800">Zakriya Butt </p>
+              <p class="line-clamp-1 ml-2 text-gray-800">ZFS Estate </p>
             </div>
 
             <div class="flex justify-end">
