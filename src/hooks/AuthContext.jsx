@@ -24,48 +24,48 @@ const AuthProvider = ({ children }) => {
     };
   }, [user.access]);
 
-  useLayoutEffect(() => {
-    console.count("Setting up: Refresh on expire inspector...");
+  // useLayoutEffect(() => {
+  //   console.count("Setting up: Refresh on expire inspector...");
 
-    const refreshInterceptor = api.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        const originalReq = error.config;
+  //   const refreshInterceptor = api.interceptors.response.use(
+  //     (response) => response,
+  //     async (error) => {
+  //       const originalReq = error.config;
 
-        if (
-          (error.response.status === 403 || error.response.status === 401) &&
-          error.response.data.success === false
-        ) {
-          try {
-            const res = api.get("/refresh", {
-              headers: {
-                Authorization: `Bearer ${user.refresh}`,
-              },
-            });
-            const userTokens = res.data.tokens;
+  //       if (
+  //         (error.response.status === 403 || error.response.status === 401) &&
+  //         error.response.data.success === false
+  //       ) {
+  //         try {
+  //           const res = api.get("/refresh", {
+  //             headers: {
+  //               Authorization: `Bearer ${user.refresh}`,
+  //             },
+  //           });
+  //           const userTokens = res.data.tokens;
 
-            signInUser((prevUser) => ({
-              ...prevUser,
-              access: userTokens.access,
-              refresh: userTokens.refresh,
-            }));
-            originalReq.headers.Authorization = `Bearer ${userTokens.access}`;
-            originalReq._retry = true;
+  //           signInUser((prevUser) => ({
+  //             ...prevUser,
+  //             access: userTokens.access,
+  //             refresh: userTokens.refresh,
+  //           }));
+  //           originalReq.headers.Authorization = `Bearer ${userTokens.access}`;
+  //           originalReq._retry = true;
 
-            return api(originalReq);
-          } catch {
-            setUser(emptyUser);
-          }
-        }
+  //           return api(originalReq);
+  //         } catch {
+  //           setUser(emptyUser);
+  //         }
+  //       }
 
-        return Promise.reject(error);
-      }
-    );
+  //       return Promise.reject(error);
+  //     }
+  //   );
 
-    return () => {
-      api.interceptors.response.eject(refreshInterceptor);
-    };
-  }, []);
+  //   return () => {
+  //     api.interceptors.response.eject(refreshInterceptor);
+  //   };
+  // }, []);
 
   function signOutUser() {
     setUser(emptyUser);

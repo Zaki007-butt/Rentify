@@ -2,8 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer components {
   .adjust-hot-toast {
     top: 100px !important;
   }
 }
+

@@ -19,6 +19,7 @@ import Register from './pages/Authentication/Register.jsx';
 import Login from './pages/Authentication/Login.jsx';
 import Authenticated from './utilities/Authenticated.jsx';
 import { AuthProvider } from './hooks/AuthContext.jsx';
+import Profile from './pages/User/Profile.jsx';
 
 export const queryClient = new QueryClient()
 const router = createBrowserRouter(createRoutesFromElements(
@@ -27,6 +28,7 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route path="properties" element={<Properties />} />
     <Route element={<Authenticated/>}>
       <Route path="properties/create" element={<PropertyForm />} />
+      <Route path="users/profile" element={<Profile />} />
     </Route>
     <Route path="properties/:id" element={<PropertyDetail />} />
     <Route path="users/register" element={<Register />} />

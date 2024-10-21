@@ -26,7 +26,7 @@ const Register = () => {
     if (mutation.isSuccess) {
       toast.success("Registration successful!");
       signInUser(mutation.data.tokens);
-      navigate("/properties/create");
+      navigate("/users/profile");
     }
   }, [mutation.isLoading, mutation.isError, mutation.isSuccess, mutation.error, mutation.data, signInUser, navigate]);
 
@@ -60,7 +60,7 @@ const Register = () => {
               id="email"
               {...register("email", { required: "Email is required" })}
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              placeholder="user@mailinator.com"
+              placeholder="user@email.com"
             />
             {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>
