@@ -1,10 +1,9 @@
-import axios from "axios";
-import { BASE_URL } from "../config/config";
 import _ from "lodash";
+import api from ".";
 
 export const createUser = async (userData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/register`, userData);
+    const response = await api.post(`/register`, userData);
     return response.data;
   } catch (err) {
     if (err.response.status == 400) {

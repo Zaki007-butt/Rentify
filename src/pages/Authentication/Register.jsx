@@ -3,9 +3,11 @@ import { useRegisterMutation } from "../../react-query/mutations/auth.mutation";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useAuth } from "../../hooks/useAuth";
 
 const Register = () => {
   const navigate = useNavigate();
+  const { signInUser } = useAuth();
   const {
     register,
     handleSubmit,
@@ -23,9 +25,10 @@ const Register = () => {
 
     if (mutation.isSuccess) {
       toast.success("Registration successful!");
-      navigate("/");
+      signInUser(mutation.data.tokens);
+      navigate("/properties/create");
     }
-  }, [mutation.isLoading, mutation.isError, mutation.isSuccess, mutation.error, navigate]);
+  }, [mutation.isLoading, mutation.isError, mutation.isSuccess, mutation.error, mutation.data, signInUser, navigate]);
 
   const onSubmit = (data) => {
     mutation.mutate(data);

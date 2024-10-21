@@ -17,14 +17,18 @@ import PropertyForm from './pages/PropertyForm.jsx'
 import PropertyDetail from './pages/PropertyDetail.jsx';
 import Register from './pages/Authentication/Register.jsx';
 import Login from './pages/Authentication/Login.jsx';
+import Authenticated from './utilities/Authenticated.jsx';
+import { AuthProvider } from './hooks/AuthContext.jsx';
 
 export const queryClient = new QueryClient()
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/" element={<RootLayout />}>
     <Route index element={<Properties />} />
     <Route path="properties" element={<Properties />} />
+    <Route element={<Authenticated/>}>
+      <Route path="properties/create" element={<PropertyForm />} />
+    </Route>
     <Route path="properties/:id" element={<PropertyDetail />} />
-    <Route path="properties/create" element={<PropertyForm />} />
     <Route path="users/register" element={<Register />} />
     <Route path="users/login" element={<Login />} />
   </Route>
@@ -33,7 +37,9 @@ const router = createBrowserRouter(createRoutesFromElements(
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </QueryClientProvider>
   </React.StrictMode>,
 )

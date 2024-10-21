@@ -1,44 +1,42 @@
-import axios from "axios"
-import { BASE_URL } from "../config/config"
+import api from ".";
 
 export const getProperties = (categoryID, subcategoryID, searchKeyword) => {
   let params = {};
 
   if (categoryID) {
-    params['category_id'] = categoryID;
+    params["category_id"] = categoryID;
   }
   if (subcategoryID) {
-    params['type_id'] = subcategoryID;
+    params["type_id"] = subcategoryID;
   }
   if (searchKeyword) {
-    params['search'] = searchKeyword;
+    params["search"] = searchKeyword;
   }
 
   const queryString = new URLSearchParams(params).toString();
-  const URL = `${BASE_URL}/properties/?${queryString}`;
+  const URL = `/properties/?${queryString}`;
 
-  return axios.get(URL);
+  return api.get(URL);
 };
 export const getPropertiesCategories = async () => {
-  const { data } = await axios.get(`${BASE_URL}/categories/`)
-  return data
-}
+  const { data } = await api.get(`/categories/`);
+  return data;
+};
 
 export const getPropertiesCategoryTypes = async (categoryId) => {
-  const { data } = await axios.get(`${BASE_URL}/categories/${categoryId}/types/`);
+  const { data } = await api.get(`/categories/${categoryId}/types/`);
   return data;
 };
 
 export const getSingleProperty = async (propertyID) => {
-  const { data } = await axios.get(`${BASE_URL}/properties/${propertyID}/`);
+  const { data } = await api.get(`/properties/${propertyID}/`);
   return data;
 };
 
-
 export const createProperty = async (propertyData) => {
   let data = {
-    ...propertyData
-  }
-  const response = await axios.post(`${BASE_URL}/properties/`, data);
+    ...propertyData,
+  };
+  const response = await api.post(`/properties/`, data);
   return response;
-}
+};

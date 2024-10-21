@@ -1,8 +1,7 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom';
-import Navbar from '../shared/Navbar';
-import Footer from '../shared/Footer';
-import { Toaster } from 'react-hot-toast';
+import { Outlet } from "react-router-dom";
+import Navbar from "../shared/Navbar";
+import Footer from "../shared/Footer";
+import { Toaster } from "react-hot-toast";
 
 const RootLayout = () => {
   return (
@@ -12,9 +11,9 @@ const RootLayout = () => {
         <Outlet />
       </div>
       <Footer />
-      <Toaster containerClassName='adjust-hot-toast' />
+      <Toaster containerClassName="adjust-hot-toast" />
     </>
-  )
-}
+  );
+};
 
-export default RootLayout
+export default RootLayout;
