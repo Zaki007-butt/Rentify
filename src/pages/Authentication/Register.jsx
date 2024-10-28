@@ -101,6 +101,19 @@ const Register = () => {
               <p className="text-red-500 text-sm">{errors.password_confirmation.message}</p>
             )}
           </div>
+
+          <div className="mb-5 flex items-center">
+            <input
+              id="checkbox"
+              type="checkbox"
+              {...register("is_admin", { value: false })}
+              className="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out"
+            />
+            <label htmlFor="checkbox" className="ml-2 text-gray-700">
+              I am Accountant Admin
+            </label>
+          </div>
+
           <button
             type="submit"
             disabled={isSubmitting}
