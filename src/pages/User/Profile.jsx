@@ -35,7 +35,8 @@ const Profile = () => {
               alt="Profile Avatar"
             />
             <h2 className="text-xl font-semibold mt-4 text-gray-800">{userData.data.name}</h2>
-            <p className="text-gray-500 mt-2">{userData.data.email}</p>
+            <p className="text-gray-500 mt-1">{userData.data.email}</p>
+            <p className="text-gray-500 mt-4 uppercase">({userData.data.is_admin ? 'Accountant Admin' : 'Customer'})</p>
             <p className="text-gray-600 mt-4 text-center">
               Passionate about creating web applications and improving user experiences. Currently
               building amazing products at TechCorp.

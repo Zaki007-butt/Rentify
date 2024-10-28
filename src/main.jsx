@@ -26,8 +26,10 @@ const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/" element={<RootLayout />}>
     <Route index element={<Properties />} />
     <Route path="properties" element={<Properties />} />
-    <Route element={<Authenticated/>}>
+    <Route element={<Authenticated admin />}>
       <Route path="properties/create" element={<PropertyForm />} />
+    </Route>
+    <Route element={<Authenticated />}>
       <Route path="users/profile" element={<Profile />} />
     </Route>
     <Route path="properties/:id" element={<PropertyDetail />} />

@@ -1,7 +1,17 @@
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 const UserLayout = ({ children }) => {
   const location = useLocation();
+  const { user } = useAuth();
+  const sideNavLinks = [
+    {
+      children: "Profile",
+      to: "/users/profile",
+    },
+  ];
+
+  if (user.is_admin) sideNavLinks.push({ children: "Properties", to: "/properties/create" });
 
   return (
     <div className="min-h-screen flex">
@@ -10,26 +20,17 @@ const UserLayout = ({ children }) => {
         <h2 className="text-xl font-bold text-gray-800 mb-8">Dashboard</h2>
         {/* Navigation Tabs */}
         <div className="space-y-2">
-          <Link
-            to="/users/profile"
-            className={`block w-full text-left px-4 py-2 rounded-lg ${
-              location.pathname.includes("profile")
-                ? "bg-blue-500 text-white"
-                : "bg-gray-100 text-gray-700"
-            } hover:bg-blue-500 hover:text-white transition`}
-          >
-            Profile
-          </Link>
-          <Link
-            to="/properties/create"
-            className={`block w-full text-left px-4 py-2 rounded-lg ${
-              location.pathname.includes("properties")
-                ? "bg-blue-500 text-white"
-                : "bg-gray-100 text-gray-700"
-            } hover:bg-blue-500 hover:text-white transition`}
-          >
-            Properties
-          </Link>
+          {sideNavLinks.map((linkProps, i) => (
+            <Link
+              key={i}
+              {...linkProps}
+              className={`block w-full text-left px-4 py-2 rounded-lg ${
+                location.pathname.includes(linkProps.children.toLowerCase())
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-100 text-gray-700"
+              } hover:bg-blue-500 hover:text-white transition`}
+            />
+          ))}
         </div>
       </div>
 
