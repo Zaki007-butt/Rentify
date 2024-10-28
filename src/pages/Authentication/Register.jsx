@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useRegisterMutation } from "../../react-query/mutations/auth.mutation";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -28,7 +28,15 @@ const Register = () => {
       signInUser(mutation.data.tokens);
       navigate("/users/profile");
     }
-  }, [mutation.isLoading, mutation.isError, mutation.isSuccess, mutation.error, mutation.data, signInUser, navigate]);
+  }, [
+    mutation.isLoading,
+    mutation.isError,
+    mutation.isSuccess,
+    mutation.error,
+    mutation.data,
+    signInUser,
+    navigate,
+  ]);
 
   const onSubmit = (data) => {
     mutation.mutate(data);
@@ -100,6 +108,13 @@ const Register = () => {
           >
             Register New Account
           </button>
+          <br />
+          <p className="mt-4">
+            Already have an account?{" "}
+            <Link to="/users/login" className="text-blue-600 font-semibold hover:underline">
+              Login
+            </Link>
+          </p>
         </form>
       </div>
     </div>

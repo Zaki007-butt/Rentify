@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useLoginMutation } from "../../react-query/mutations/auth.mutation";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -83,6 +83,8 @@ const Login = () => {
           >
             Login
           </button>
+          <br />
+          <p className="mt-4">Don&apos;t have an account? <Link to="/users/register" className="text-blue-600 font-semibold hover:underline">Register</Link> </p>
         </form>
       </div>
     </div>
