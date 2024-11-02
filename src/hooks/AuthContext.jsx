@@ -37,6 +37,7 @@ const AuthProvider = ({ children }) => {
           error.response.data.code === "token_not_valid"
         ) {
           try {
+            console.log("Trying refresh...")
             const res = await api.post("/refresh", { refresh: user.refresh });
             const userToken = res.data;
 
@@ -49,7 +50,7 @@ const AuthProvider = ({ children }) => {
 
             return api(originalReq);
           } catch (e) {
-            console.log(e);
+            console.log("Authentication failed:", e.message);
             setUser(emptyUser);
           }
         }

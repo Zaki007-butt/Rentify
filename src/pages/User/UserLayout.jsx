@@ -11,7 +11,7 @@ const UserLayout = ({ children }) => {
     },
   ];
 
-  if (user.is_admin) sideNavLinks.push({ children: "Properties", to: "/properties/create" });
+  if (user.is_admin) sideNavLinks.push({ children: "Properties", to: "/users/properties" });
 
   return (
     <div className="min-h-screen flex">

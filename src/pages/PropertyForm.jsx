@@ -28,14 +28,14 @@ const PropertyForm = () => {
 
   const watchCategory = watch("property_category");
   useEffect(() => {
-    if (watchCategory) {
+    if (watchCategory && watchCategory !== "Loading...") {
       setSelectedCategory(watchCategory);
     }
   }, [watchCategory]);
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-1">Properties</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-1">Create Property</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="w-1/2">
         <label
@@ -235,12 +235,20 @@ const PropertyForm = () => {
           <span className="text-red-500">{errors.property_type.message}</span>
         )}
 
-        <button
-          type="submit"
-          className="mt-4 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-3 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >
-          Add Property
-        </button>
+        <div className="flex gap-3 items-center">
+          <button
+            onClick={() => navigate(-1)}
+            className="mt-4 px-4 py-3 w-1/3 bg-blue-500 text-white rounded-lg"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="mt-4 w-2/3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-3 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            Add Property
+          </button>
+        </div>
       </form>
     </div>
   );

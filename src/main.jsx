@@ -14,6 +14,7 @@ import {
 import Properties from './pages/Properties.jsx'
 import RootLayout from './components/layouts/RootLayout.jsx'
 import PropertyForm from './pages/PropertyForm.jsx'
+import UserProperties from './pages/User/UserProperties.jsx'
 import PropertyDetail from './pages/PropertyDetail.jsx';
 import Register from './pages/Authentication/Register.jsx';
 import Login from './pages/Authentication/Login.jsx';
@@ -27,6 +28,7 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route index element={<Properties />} />
     <Route path="properties" element={<Properties />} />
     <Route element={<Authenticated admin />}>
+      <Route path="users/properties" element={<UserProperties />} />
       <Route path="properties/create" element={<PropertyForm />} />
     </Route>
     <Route element={<Authenticated />}>
