@@ -16,7 +16,7 @@ const UserLayout = ({ children }) => {
   return (
     <div className="min-h-screen flex">
       {/* Sidebar */}
-      <div className="w-64 bg-white shadow-md p-6">
+      <div className="w-64 min-w-64 bg-white shadow-md p-6">
         <h2 className="text-xl font-bold text-gray-800 mb-8">Dashboard</h2>
         {/* Navigation Tabs */}
         <div className="space-y-2">

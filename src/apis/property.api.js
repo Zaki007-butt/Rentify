@@ -12,7 +12,7 @@ export const getProperties = (categoryID, subcategoryID, searchKeyword, pageSize
   if (searchKeyword) {
     params["search"] = searchKeyword;
   }
-  if(pageSize) {
+  if (pageSize) {
     params["page_size"] = pageSize;
   }
 
@@ -32,6 +32,7 @@ export const getPropertiesCategoryTypes = async (categoryId) => {
 };
 
 export const getSingleProperty = async (propertyID) => {
+  if (!propertyID) return null;
   const { data } = await api.get(`/properties/${propertyID}/`);
   return data;
 };
@@ -42,4 +43,19 @@ export const createProperty = async (propertyData) => {
   };
   const response = await api.post(`/properties/`, data);
   return response;
+};
+
+export const updateProperty = async ({ id, ...propertyData }) => {
+  console.log("my data:", id, propertyData);
+  const data = {
+    ...propertyData,
+  };
+  const response = await api.put(`/properties/${id}/`, data);
+  return response;
+};
+
+export const deleteSingleProperty = async (propertyId) => {
+  if (!propertyId) return null;
+  const { data } = await api.delete(`/properties/${propertyId}/`);
+  return data;
 };

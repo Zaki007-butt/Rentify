@@ -22,6 +22,7 @@ import Authenticated from './utilities/Authenticated.jsx';
 import { AuthProvider } from './hooks/AuthContext.jsx';
 import Profile from './pages/User/Profile.jsx';
 import Customers from './pages/User/Customers.jsx';
+import UserPropertyManage from './pages/User/UserPropertyManage.jsx';
 
 export const queryClient = new QueryClient()
 const router = createBrowserRouter(createRoutesFromElements(
@@ -31,6 +32,8 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route path="admin" element={<Authenticated admin />}>
       <Route path="properties" element={<UserProperties />} />
       <Route path="properties/create" element={<PropertyForm />} />
+      <Route path="properties/:id" element={<UserPropertyManage />} />
+      <Route path="properties/:id/edit" element={<PropertyForm />} />
       <Route path="customers" element={<Customers />} />
     </Route>
     <Route element={<Authenticated />}>

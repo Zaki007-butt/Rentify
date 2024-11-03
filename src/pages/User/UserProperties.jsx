@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import { useGetProperties } from "../../react-query/queries/property.queries";
 import { useEffect, useState, useMemo } from "react";
 import Loader from "../../components/shared/Loader";
 import FilterComponent from "../../components/TableFilter";
+import { PROPERTIES_PAGE_SIZE } from "../../react-query/constants/keys";
 
 const columns = [
   {
@@ -40,13 +41,14 @@ const columns = [
 function UserProperties() {
   const [tableData, setTableData] = useState([]);
   const [filterText, setFilterText] = useState("");
+  const navigate = useNavigate();
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
   let categoryID, subcategoryID, searchKeyword;
   const { data: response, isPending } = useGetProperties(
     categoryID,
     subcategoryID,
     searchKeyword,
-    10000
+    PROPERTIES_PAGE_SIZE
   );
 
   const subHeaderComponentMemo = useMemo(() => {
@@ -65,6 +67,10 @@ function UserProperties() {
       />
     );
   }, [filterText, resetPaginationToggle]);
+
+  const handleRowClick = (row) => {
+    navigate(`${row.id}`);
+  };
 
   useEffect(() => {
     if (!isPending && response?.data?.results?.length > 0) {
@@ -122,6 +128,8 @@ function UserProperties() {
             striped
             paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
             subHeaderComponent={subHeaderComponentMemo}
+            pointerOnHover
+            onRowClicked={handleRowClick}
           />
         )}
       </div>

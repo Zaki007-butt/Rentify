@@ -6,7 +6,7 @@ import { QUERY_KEYS } from '../constants/keys'
 
 export const useGetProperties = (categoryID, subcategoryID, searchKeyword, pageSize = 100) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.PROPERTIES, categoryID, subcategoryID, searchKeyword],
+    queryKey: [QUERY_KEYS.PROPERTIES, categoryID, subcategoryID, searchKeyword, pageSize],
     queryFn: () => getProperties(categoryID, subcategoryID, searchKeyword, pageSize),
     staleTime: 20 * 1000
   })
