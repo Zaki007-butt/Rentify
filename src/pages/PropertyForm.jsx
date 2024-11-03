@@ -23,7 +23,7 @@ const PropertyForm = () => {
 
   const onSubmit = async (formData) => {
     await mutateAsync(formData);
-    navigate("/");
+    navigate("/admin/properties");
   };
 
   const watchCategory = watch("property_category");

@@ -33,11 +33,12 @@ const AuthProvider = ({ children }) => {
         const originalReq = error.config;
 
         if (
-          (error.response.status === 401 && error.response.data.errors.code === "token_not_valid") ||
-          error.response.data.code === "token_not_valid"
+          error.response.status === 401 ||
+          error.response.data?.errors?.code === "token_not_valid" ||
+          error.response.data?.code === "token_not_valid"
         ) {
           try {
-            console.log("Trying refresh...")
+            console.log("Trying refresh...");
             const res = await api.post("/refresh", { refresh: user.refresh });
             const userToken = res.data;
 
