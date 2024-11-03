@@ -21,15 +21,17 @@ import Login from './pages/Authentication/Login.jsx';
 import Authenticated from './utilities/Authenticated.jsx';
 import { AuthProvider } from './hooks/AuthContext.jsx';
 import Profile from './pages/User/Profile.jsx';
+import Customers from './pages/User/Customers.jsx';
 
 export const queryClient = new QueryClient()
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/" element={<RootLayout />}>
     <Route index element={<Properties />} />
     <Route path="properties" element={<Properties />} />
-    <Route element={<Authenticated admin />}>
-      <Route path="users/properties" element={<UserProperties />} />
+    <Route path="admin" element={<Authenticated admin />}>
+      <Route path="properties" element={<UserProperties />} />
       <Route path="properties/create" element={<PropertyForm />} />
+      <Route path="customers" element={<Customers />} />
     </Route>
     <Route element={<Authenticated />}>
       <Route path="users/profile" element={<Profile />} />
