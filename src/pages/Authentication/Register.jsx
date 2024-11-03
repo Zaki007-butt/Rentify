@@ -102,7 +102,7 @@ const Register = () => {
             )}
           </div>
 
-          <div className="mb-5 flex items-center">
+          {/* <div className="mb-5 flex items-center">
             <input
               id="checkbox"
               type="checkbox"
@@ -112,7 +112,7 @@ const Register = () => {
             <label htmlFor="checkbox" className="ml-2 text-gray-700">
               I am Accountant Admin
             </label>
-          </div>
+          </div> */}
 
           <button
             type="submit"
