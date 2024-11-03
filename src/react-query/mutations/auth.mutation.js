@@ -8,7 +8,7 @@ export const useRegisterMutation = () => {
   return useMutation({
     mutationFn: createUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.PROPERTIES_CATEGORIES_TYPE] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] });
     },
   });
 };
@@ -17,7 +17,7 @@ export const useLoginMutation = () => {
   return useMutation({
     mutationFn: loginUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.PROPERTIES_CATEGORIES_TYPE] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] });
     },
   });
 };

@@ -26,7 +26,7 @@ const Login = () => {
     if (mutation.isSuccess) {
       toast.success("Logged in successful!");
       signInUser(mutation.data.tokens);
-      navigate("/users/profile");
+      navigate("/user/profile");
     }
   }, [
     mutation.isLoading,

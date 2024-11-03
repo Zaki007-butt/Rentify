@@ -23,6 +23,9 @@ import { AuthProvider } from './hooks/AuthContext.jsx';
 import Profile from './pages/User/Profile.jsx';
 import Customers from './pages/User/Customers.jsx';
 import UserPropertyManage from './pages/User/UserPropertyManage.jsx';
+import Agreements from './pages/User/Agreements.jsx';
+import CustomerAgreements from './pages/Customer/Agreements.jsx';
+
 
 export const queryClient = new QueryClient()
 const router = createBrowserRouter(createRoutesFromElements(
@@ -35,9 +38,11 @@ const router = createBrowserRouter(createRoutesFromElements(
       <Route path="properties/:id" element={<UserPropertyManage />} />
       <Route path="properties/:id/edit" element={<PropertyForm />} />
       <Route path="customers" element={<Customers />} />
+      <Route path="agreements" element={<Agreements />} />
     </Route>
-    <Route element={<Authenticated />}>
-      <Route path="users/profile" element={<Profile />} />
+    <Route path="user" element={<Authenticated />}>
+      <Route path="profile" element={<Profile />} />
+      <Route path="agreements" element={<CustomerAgreements />} />
     </Route>
     <Route path="properties/:id" element={<PropertyDetail />} />
     <Route path="users/register" element={<Register />} />

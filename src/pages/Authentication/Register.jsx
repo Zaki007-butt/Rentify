@@ -26,7 +26,7 @@ const Register = () => {
     if (mutation.isSuccess) {
       toast.success("Registration successful!");
       signInUser(mutation.data.tokens);
-      navigate("/users/profile");
+      navigate("/user/profile");
     }
   }, [
     mutation.isLoading,

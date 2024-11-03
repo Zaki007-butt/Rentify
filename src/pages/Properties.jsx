@@ -69,7 +69,7 @@ const Properties = () => {
   }
 
   return (
-    <div className='container mx-auto'>
+    <div className='container mx-auto mb-16'>
       <div className="flex items-center justify-between w-full">
         <div className='flex'>
           <Dropdown
