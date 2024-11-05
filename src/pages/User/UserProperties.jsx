@@ -43,11 +43,12 @@ function UserProperties() {
   const [filterText, setFilterText] = useState("");
   const navigate = useNavigate();
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-  let categoryID, subcategoryID, searchKeyword;
+  let categoryID, subcategoryID, searchKeyword, type;
   const { data: response, isPending } = useGetProperties(
     categoryID,
     subcategoryID,
     searchKeyword,
+    type,
     PROPERTIES_PAGE_SIZE
   );
 

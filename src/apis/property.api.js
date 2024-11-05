@@ -1,6 +1,6 @@
 import api from ".";
 
-export const getProperties = (categoryID, subcategoryID, searchKeyword, pageSize) => {
+export const getProperties = (categoryID, subcategoryID, searchKeyword, type, pageSize) => {
   let params = {};
 
   if (categoryID) {
@@ -15,6 +15,7 @@ export const getProperties = (categoryID, subcategoryID, searchKeyword, pageSize
   if (pageSize) {
     params["page_size"] = pageSize;
   }
+  if (type) params["type"] = type;
 
   const queryString = new URLSearchParams(params).toString();
   const URL = `/properties/?${queryString}`;

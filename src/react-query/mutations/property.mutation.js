@@ -26,7 +26,7 @@ export const useDeletePropertyMutation = () => {
   return useMutation({
     mutationFn: deleteSingleProperty,
     onSuccess: () => {
-      let categoryID, subcategoryID, searchKeyword;
+      let categoryID, subcategoryID, searchKeyword, type;
 
       queryClient.invalidateQueries({
         queryKey: [
@@ -34,6 +34,7 @@ export const useDeletePropertyMutation = () => {
           categoryID,
           subcategoryID,
           searchKeyword,
+          type,
           PROPERTIES_PAGE_SIZE,
         ],
       });
