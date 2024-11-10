@@ -9,8 +9,8 @@ const UserLayout = ({ children }) => {
   if (user.is_admin)
     sideNavLinks.push(
       { children: "Properties", to: "/admin/properties" },
+      { children: "Agreements", to: "/admin/agreements" },
       { children: "Customers", to: "/admin/customers" },
-      { children: "Agreements", to: "/admin/agreements" }
     );
   else sideNavLinks.push({ children: "Agreements", to: "/user/agreements" });
 

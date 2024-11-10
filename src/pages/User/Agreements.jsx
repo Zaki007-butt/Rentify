@@ -4,6 +4,7 @@ import { useGetAgreements } from "../../react-query/queries/agreement.queries";
 import { useEffect, useState, useMemo } from "react";
 import Loader from "../../components/shared/Loader";
 import FilterComponent from "../../components/TableFilter";
+import { formatDate } from "../../utilities/helpers";
 
 const columns = [
   {
@@ -78,7 +79,7 @@ function Agreements() {
         response.data.results.map((agreement) => ({
           id: agreement.id,
           details: agreement.details,
-          created_at: agreement.created_at,
+          created_at: formatDate(agreement.created_at),
           security_amount: agreement.security_amount,
           status: agreement.status,
         }))
