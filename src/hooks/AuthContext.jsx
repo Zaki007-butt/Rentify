@@ -2,6 +2,8 @@ import { createContext, useLayoutEffect } from "react";
 import api from "../apis";
 import { jwtDecode } from "jwt-decode";
 import useLocalStorage from "./useLocalStorage";
+import axios from "axios";
+import { BASE_URL } from "../config/config";
 
 const AuthContext = createContext(undefined);
 
@@ -39,7 +41,7 @@ const AuthProvider = ({ children }) => {
         ) {
           try {
             console.log("Trying refresh...");
-            const res = await api.post("/refresh", { refresh: user.refresh });
+            const res = await axios.post(`${BASE_URL}/refresh`, { refresh: user.refresh });
             const userToken = res.data;
 
             setUser((prevUser) => ({
