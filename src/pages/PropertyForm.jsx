@@ -23,18 +23,18 @@ const PropertyForm = () => {
     formState: { errors },
     watch,
   } = useForm();
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(1);
 
   const { mutateAsync: createProperty } = useCreatePropertyMutation();
   const { mutateAsync: updateProperty } = useUpdatePropertyMutation(id); // Define the update mutation
-  const { data: categories, isLoading: isLoadingCategories } = useGetPropertiesCategories();
-  const { data: propertyTypes, isLoading: isLoadingPropertyTypes } = useGetPropertyTypesQuery(
-    selectedCategory,
-    !!selectedCategory
-  );
+  const { data: categories, isLoading: isLoadingCategories } =
+    useGetPropertiesCategories();
+  const { data: propertyTypes, isLoading: isLoadingPropertyTypes } =
+    useGetPropertyTypesQuery(selectedCategory, !!selectedCategory);
 
   // Fetch existing property data
-  const { data: existingProperty, isLoading: isLoadingProperty } = useGetSingleProperty(id);
+  const { data: existingProperty, isLoading: isLoadingProperty } =
+    useGetSingleProperty(id);
 
   useEffect(() => {
     if (existingProperty) {
@@ -71,13 +71,18 @@ const PropertyForm = () => {
 
   const watchCategory = watch("property_category");
   useEffect(() => {
+    console.log("watchCategory", watchCategory);
     if (watchCategory && watchCategory !== "Loading...") {
       setSelectedCategory(watchCategory);
+      if (watchCategory == 2 || watchCategory == 3) {
+        setValue("bedroom", 0);
+        setValue("washroom", 0);
+      }
     }
   }, [watchCategory]);
 
   if (isLoadingProperty || isLoadingCategories || isLoadingPropertyTypes) {
-    return <Loader />; // Optionally show a loading state
+    return <Loader />;
   }
 
   return (
@@ -100,12 +105,17 @@ const PropertyForm = () => {
           type="text"
           {...register("title", {
             required: "Title is required",
-            maxLength: { value: 200, message: "Title cannot exceed 200 characters" },
+            maxLength: {
+              value: 200,
+              message: "Title cannot exceed 200 characters",
+            },
           })}
           className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg"
           placeholder="Title"
         />
-        {errors.title && <span className="text-red-500">{errors.title.message}</span>}
+        {errors.title && (
+          <span className="text-red-500">{errors.title.message}</span>
+        )}
 
         <label
           htmlFor="description"
@@ -120,7 +130,9 @@ const PropertyForm = () => {
           placeholder="Description"
           rows={6}
         />
-        {errors.description && <span className="text-red-500">{errors.description.message}</span>}
+        {errors.description && (
+          <span className="text-red-500">{errors.description.message}</span>
+        )}
 
         <label
           htmlFor="price"
@@ -138,7 +150,9 @@ const PropertyForm = () => {
           className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
           placeholder="Price"
         />
-        {errors.price && <span className="text-red-500">{errors.price.message}</span>}
+        {errors.price && (
+          <span className="text-red-500">{errors.price.message}</span>
+        )}
 
         <label
           htmlFor="address"
@@ -151,12 +165,17 @@ const PropertyForm = () => {
           type="text"
           {...register("address", {
             required: "Address is required",
-            maxLength: { value: 255, message: "Address cannot exceed 255 characters" },
+            maxLength: {
+              value: 255,
+              message: "Address cannot exceed 255 characters",
+            },
           })}
           className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
           placeholder="Address"
         />
-        {errors.address && <span className="text-red-500">{errors.address.message}</span>}
+        {errors.address && (
+          <span className="text-red-500">{errors.address.message}</span>
+        )}
 
         <label
           htmlFor="city"
@@ -169,69 +188,17 @@ const PropertyForm = () => {
           type="text"
           {...register("city", {
             required: "City is required",
-            maxLength: { value: 255, message: "City cannot exceed 255 characters" },
+            maxLength: {
+              value: 255,
+              message: "City cannot exceed 255 characters",
+            },
           })}
           className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
           placeholder="City"
         />
-        {errors.address && <span className="text-red-500">{errors.address.message}</span>}
-
-        <div className="grid grid-cols-2 gap-2 mt-2">
-          <div>
-            <label
-              htmlFor="bedroom"
-              className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-            >
-              Bedroom
-            </label>
-            <input
-              id="bedroom"
-              type="number"
-              {...register("bedroom", {
-                min: { value: 0, message: "Bedroom count cannot be negative" },
-              })}
-              className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
-              placeholder="Bedroom"
-            />
-            {errors.bedroom && <span className="text-red-500">{errors.bedroom.message}</span>}
-          </div>
-          <div></div>
-          <div>
-            <label
-              htmlFor="washroom"
-              className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-            >
-              Washroom
-            </label>
-            <input
-              id="washroom"
-              type="number"
-              {...register("washroom", {
-                min: { value: 0, message: "Washroom count cannot be negative" },
-              })}
-              className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
-              placeholder="Washroom"
-            />
-            {errors.washroom && <span className="text-red-500">{errors.washroom.message}</span>}
-          </div>
-        </div>
-
-        <div className="mt-2">
-          <label
-            htmlFor="area"
-            className="my-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-          >
-            Area (sqft)
-          </label>
-          <input
-            id="area"
-            type="number"
-            {...register("area", { min: { value: 0, message: "Area must be greater than 0" } })}
-            className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
-            placeholder="Area (yard sq)"
-          />
-          {errors.area && <span className="text-red-500">{errors.area.message}</span>}
-        </div>
+        {errors.address && (
+          <span className="text-red-500">{errors.address.message}</span>
+        )}
 
         <label
           htmlFor="property_category"
@@ -241,7 +208,10 @@ const PropertyForm = () => {
         </label>
         <select
           id="property_category"
-          {...register("property_category", { required: "Property category is required" })}
+          {...register("property_category", {
+            defaultValue: selectedCategory,
+            required: "Property category is required",
+          })}
           className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
         >
           {isLoadingCategories ? (
@@ -256,7 +226,9 @@ const PropertyForm = () => {
           )}
         </select>
         {errors.property_category && (
-          <span className="text-red-500">{errors.property_category.message}</span>
+          <span className="text-red-500">
+            {errors.property_category.message}
+          </span>
         )}
 
         <label
@@ -267,7 +239,9 @@ const PropertyForm = () => {
         </label>
         <select
           id="property_type"
-          {...register("property_type", { required: "Property type is required" })}
+          {...register("property_type", {
+            required: "Property type is required",
+          })}
           className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
           disabled={!selectedCategory}
         >
@@ -284,6 +258,81 @@ const PropertyForm = () => {
         </select>
         {errors.property_type && (
           <span className="text-red-500">{errors.property_type.message}</span>
+        )}
+
+        <div className="mt-2">
+          <label
+            htmlFor="area"
+            className="my-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+          >
+            Area (sqft)
+          </label>
+          <input
+            id="area"
+            type="number"
+            {...register("area", {
+              min: { value: 0, message: "Area must be greater than 0" },
+            })}
+            className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
+            placeholder="Area (yard sq)"
+          />
+          {errors.area && (
+            <span className="text-red-500">{errors.area.message}</span>
+          )}
+        </div>
+
+        {selectedCategory != 2 && selectedCategory != 3 && (
+          <div className="grid grid-cols-2 gap-2 mt-2">
+            <div>
+              <label
+                htmlFor="bedroom"
+                className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+              >
+                Bedroom
+              </label>
+              <input
+                id="bedroom"
+                type="number"
+                {...register("bedroom", {
+                  value: 0,
+                  min: {
+                    value: 0,
+                    message: "Bedroom count cannot be negative",
+                  },
+                })}
+                className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
+                placeholder="Bedroom"
+              />
+              {errors.bedroom && (
+                <span className="text-red-500">{errors.bedroom.message}</span>
+              )}
+            </div>
+            <div></div>
+            <div>
+              <label
+                htmlFor="washroom"
+                className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+              >
+                Washroom
+              </label>
+              <input
+                id="washroom"
+                type="number"
+                {...register("washroom", {
+                  value: 0,
+                  min: {
+                    value: 0,
+                    message: "Washroom count cannot be negative",
+                  },
+                })}
+                className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
+                placeholder="Washroom"
+              />
+              {errors.washroom && (
+                <span className="text-red-500">{errors.washroom.message}</span>
+              )}
+            </div>
+          </div>
         )}
 
         <div className="flex gap-3 items-center">
