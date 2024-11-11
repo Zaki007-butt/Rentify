@@ -20,8 +20,8 @@ function AgreementForm() {
     defaultValues: {
       details: "",
       security_amount: "",
-      property: propertyId,
-      user: user.user_id,
+      property_id: propertyId,
+      user_id: user.user_id,
     },
   });
 
