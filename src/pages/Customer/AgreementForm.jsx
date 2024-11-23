@@ -5,12 +5,16 @@ import PropertyDetailCard from "../../components/cards/PropertyDetailCard";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
 import { useCreateAgreementMutation } from "../../react-query/mutations/agreement.mutation";
+import Error404 from "../Error/404";
 
 function AgreementForm() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const propertyId = searchParams.get("property_id");
+  const customerId = searchParams.get("customer_id");
+
+  if (!propertyId || !customerId) return <Error404 />;
 
   const {
     register,
@@ -22,6 +26,7 @@ function AgreementForm() {
       security_amount: "",
       property_id: propertyId,
       user_id: user.user_id,
+      customer_id: customerId,
     },
   });
 
@@ -37,7 +42,7 @@ function AgreementForm() {
   }
 
   if (error) {
-    return <div>{error.message}</div>;
+    return <Error404 message={error.message} />;
   }
 
   return (

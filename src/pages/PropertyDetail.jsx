@@ -12,7 +12,8 @@ const PropertyDetail = () => {
 
   const handleRequestAgreement = () => {
     if (!user) navigate("/users/login");
-    else navigate(`/user/agreements/create?property_id=${id}`);
+    else if (false) navigate(`/user/agreements/create?property_id=${id}`); // if customer_id exist for this customer
+    else navigate(`/user/customers/create?property_id=${id}`);
   };
 
   if (isPending) {
