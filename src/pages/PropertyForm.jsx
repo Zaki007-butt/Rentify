@@ -23,7 +23,7 @@ const PropertyForm = () => {
     formState: { errors },
     watch,
   } = useForm();
-  const [selectedCategory, setSelectedCategory] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState();
 
   const { mutateAsync: createProperty } = useCreatePropertyMutation();
   const { mutateAsync: updateProperty } = useUpdatePropertyMutation(id); // Define the update mutation
@@ -88,7 +88,7 @@ const PropertyForm = () => {
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-1">
-        {id ? "Edit Property" : "Create Property"}
+        {id ? "Edit Property" : "Add Property"}
       </h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="w-1/2">
@@ -209,7 +209,7 @@ const PropertyForm = () => {
         <select
           id="property_category"
           {...register("property_category", {
-            defaultValue: selectedCategory,
+            defaultValue: 1,
             required: "Property category is required",
           })}
           className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
