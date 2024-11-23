@@ -95,12 +95,41 @@ function AgreementDetail() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-white rounded-lg shadow-md p-6">
           <h1 className="text-2xl font-bold text-gray-800 mb-6">
+            Customer Details
+          </h1>
+
+          <div className="space-y-4">
+            <div>
+              <span className="font-bold">Name: </span>
+              <span>{agreement?.user_details?.name}</span>
+            </div>
+            <div>
+              <span className="font-bold">Email: </span>
+              <span>{agreement?.user_details?.email}</span>
+            </div>
+            <div>
+              <span className="font-bold">CNIC: </span>
+              <span>{agreement?.customer?.cnic}</span>
+            </div>
+            <div>
+              <span className="font-bold">Phone Number: </span>
+              <span>{agreement?.customer?.phone_number}</span>
+            </div>
+            <div>
+              <span className="font-bold">Address: </span>
+              <span>{agreement?.customer?.address}</span>
+            </div>
+          </div>
+          <br />
+          <hr />
+          <br />
+          <h1 className="text-2xl font-bold text-gray-800 mb-6">
             Agreement Details
           </h1>
 
           <div className="space-y-4">
             <div>
-              <span className="font-medium">Status: </span>
+              <span className="font-bold">Status: </span>
               <span
                 className={`${
                   agreement?.status === "pending"
@@ -116,15 +145,15 @@ function AgreementDetail() {
               </span>
             </div>
             <div>
-              <span className="font-medium">Created At: </span>
+              <span className="font-bold">Created At: </span>
               <span>{formatDate(agreement?.created_at)}</span>
             </div>
             <div>
-              <span className="font-medium">Security Amount: </span>
+              <span className="font-bold">Security Amount: </span>
               <span>${agreement?.security_amount}</span>
             </div>
             <div>
-              <span className="font-medium">Details: </span>
+              <span className="font-bold">Details: </span>
               <p className="mt-1 text-gray-600">{agreement?.details}</p>
             </div>
           </div>
