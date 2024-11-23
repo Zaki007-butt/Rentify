@@ -3,6 +3,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import Error404 from "../Error/404";
 import { useCreateCustomerMutation } from "../../react-query/mutations/customer.mutation";
 import { useAuth } from "../../hooks/useAuth";
+import { useGetSingleProperty } from "../../react-query/queries/property.queries";
+import PropertyDetailCard from "../../components/cards/PropertyDetailCard";
 
 export default function CustomerForm() {
   const { user } = useAuth();
@@ -24,16 +26,30 @@ export default function CustomerForm() {
   const [searchParams] = useSearchParams();
   const property_id = searchParams.get("property_id");
   if (!property_id) return <Error404 />;
+  const {
+    data: property,
+    isPending,
+    error,
+  } = useGetSingleProperty(property_id);
   const createCustomerMutation = useCreateCustomerMutation(property_id);
+
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <Error404 message={error.message} />;
+  }
 
   const onSubmit = async (data) => {
     try {
       const createdCustomer = await createCustomerMutation.mutateAsync(data);
-
-      console.log("Created Customer:", createdCustomer);
       const customerId = createdCustomer.id;
       reset();
-      navigate("/user/agreements/create" + `?property_id=${property_id}&customer_id=${customerId}`);
+      navigate(
+        "/user/agreements/create" +
+          `?property_id=${property_id}&customer_id=${customerId}`
+      );
     } catch (error) {
       console.error("Error creating customer:", error);
     }
@@ -49,7 +65,10 @@ export default function CustomerForm() {
       )}
       <form onSubmit={handleSubmit(onSubmit)} className="max-w-md">
         <div className="mb-4">
-          <label htmlFor="cnic" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="cnic"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             CNIC
           </label>
           <input
@@ -58,11 +77,16 @@ export default function CustomerForm() {
             {...register("cnic", { required: "CNIC is required" })}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {errors.cnic && <p className="mt-1 text-sm text-red-600">{errors.cnic.message}</p>}
+          {errors.cnic && (
+            <p className="mt-1 text-sm text-red-600">{errors.cnic.message}</p>
+          )}
         </div>
 
         <div className="mb-4">
-          <label htmlFor="phone_number" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="phone_number"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Phone Number
           </label>
           <input
@@ -73,11 +97,18 @@ export default function CustomerForm() {
             })}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {errors.phone_number && <p className="mt-1 text-sm text-red-600">{errors.phone_number.message}</p>}
+          {errors.phone_number && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.phone_number.message}
+            </p>
+          )}
         </div>
 
         <div className="mb-4">
-          <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="address"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Address
           </label>
           <textarea
@@ -86,7 +117,11 @@ export default function CustomerForm() {
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows={3}
           ></textarea>
-          {errors.address && <p className="mt-1 text-sm text-red-600">{errors.address.message}</p>}
+          {errors.address && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.address.message}
+            </p>
+          )}
         </div>
 
         <button
@@ -97,6 +132,14 @@ export default function CustomerForm() {
           {createCustomerMutation.isLoading ? "Creating..." : "Create Customer"}
         </button>
       </form>
+      <br />
+      <br />
+      <hr></hr>
+      <div className="mt-10">
+        <h1 className="text-2xl font-bold mb-6">Property Details</h1>
+
+        <PropertyDetailCard property={property} />
+      </div>
     </main>
   );
 }
