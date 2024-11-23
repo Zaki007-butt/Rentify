@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useGetSingleProperty } from "../react-query/queries/property.queries";
 import PropertyDetailCard from "../components/cards/PropertyDetailCard";
 import { useAuth } from "../hooks/useAuth";
+import { useGetCustomer } from "../react-query/queries/customer.queries";
 
 const PropertyDetail = () => {
   const { id } = useParams();
@@ -9,11 +10,25 @@ const PropertyDetail = () => {
   const navigate = useNavigate();
 
   const { isPending, data: property } = useGetSingleProperty(id);
+  // Check if customer has already provided details
+  const {
+    data: customerData,
+    isPending: isGetCustomerLoading,
+    error: isGetCustomerError,
+  } = useGetCustomer();
 
   const handleRequestAgreement = () => {
     if (!user) navigate("/users/login");
-    else if (false) navigate(`/user/agreements/create?property_id=${id}`); // if customer_id exist for this customer
-    else navigate(`/user/customers/create?property_id=${id}`);
+    else if (
+      !isGetCustomerLoading &&
+      !isGetCustomerError &&
+      customerData.customer
+    ) {
+      navigate(
+        "/user/agreements/create" +
+          `?property_id=${id}&customer_id=${customerData.customer.id}`
+      );
+    } else navigate(`/user/customers/create?property_id=${id}`);
   };
 
   if (isPending) {

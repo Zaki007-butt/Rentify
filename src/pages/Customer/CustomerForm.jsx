@@ -26,6 +26,8 @@ export default function CustomerForm() {
   const [searchParams] = useSearchParams();
   const property_id = searchParams.get("property_id");
   if (!property_id) return <Error404 />;
+
+  // Get property Details to show for Request
   const {
     data: property,
     isPending,
