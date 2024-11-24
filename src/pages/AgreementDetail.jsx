@@ -12,11 +12,7 @@ function AgreementDetail() {
   const { data: agreement, isPending, error } = useGetSingleAgreement(id);
 
   if (isPending) {
-    return (
-      <div className="flex justify-center items-center w-full h-[80vh]">
-        <Loader />
-      </div>
-    );
+    return <Loader />;
   }
 
   if (error) {

@@ -92,7 +92,8 @@ function UserProperties() {
       setTableData((prevData) =>
         prevData.filter(
           (property) =>
-            property.name && property.name.toLowerCase().includes(filterText.toLowerCase())
+            property.name &&
+            property.name.toLowerCase().includes(filterText.toLowerCase())
         )
       );
     }
@@ -100,7 +101,9 @@ function UserProperties() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-1">Properties</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-1">
+        Properties
+      </h1>
       {/* Properties Content */}
       <Link
         to="/admin/properties/create"
@@ -110,9 +113,7 @@ function UserProperties() {
       </Link>
       <div className="p-4">
         {isPending ? (
-          <div className="flex justify-center items-center w-full h-[80vh]">
-            <Loader />
-          </div>
+          <Loader />
         ) : (
           <DataTable
             // title="Properties List"

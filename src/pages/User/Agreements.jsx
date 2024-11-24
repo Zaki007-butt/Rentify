@@ -113,9 +113,7 @@ function Agreements() {
       </Link> */}
       <div className="p-4">
         {isPending ? (
-          <div className="flex justify-center items-center w-full h-[80vh]">
-            <Loader />
-          </div>
+          <Loader />
         ) : (
           <DataTable
             // title="Properties List"

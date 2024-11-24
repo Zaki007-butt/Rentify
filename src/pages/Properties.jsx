@@ -14,9 +14,15 @@ import NoData from "../components/NoData";
 
 const Properties = () => {
   let [searchParams, setSearchParams] = useSearchParams();
-  const [categoryID, setCategoryID] = useState(searchParams.get("category_id") || "");
-  const [subcategoryID, setSubcategoryID] = useState(searchParams.get("subcategory_id") || "");
-  const [searchKeyword, setSearchKeyword] = useState(searchParams.get("search") || "");
+  const [categoryID, setCategoryID] = useState(
+    searchParams.get("category_id") || ""
+  );
+  const [subcategoryID, setSubcategoryID] = useState(
+    searchParams.get("subcategory_id") || ""
+  );
+  const [searchKeyword, setSearchKeyword] = useState(
+    searchParams.get("search") || ""
+  );
   const { data: response, isPending } = useGetProperties(
     categoryID,
     subcategoryID,
@@ -79,15 +85,30 @@ const Properties = () => {
     <div className="container mx-auto mb-16">
       <div className="flex items-center justify-between w-full">
         <div className="flex">
-          <Dropdown filterField="Category" list={categories} setElement={updateCategoryId} />
-          {categoryID && <Dropdown filterField="Subcategory" list={subcategories} setElement={updateSubcategoryId} />}
+          <Dropdown
+            filterField="Category"
+            list={categories}
+            setElement={updateCategoryId}
+          />
+          {categoryID && (
+            <Dropdown
+              filterField="Subcategory"
+              list={subcategories}
+              setElement={updateSubcategoryId}
+            />
+          )}
         </div>
-        <SearchBar searchKeyword={searchKeyword} updateSearchKeyword={updateSearchKeyword} />
+        <SearchBar
+          searchKeyword={searchKeyword}
+          updateSearchKeyword={updateSearchKeyword}
+        />
       </div>
       <div className="flex pb-8">
         {categoryID && (
           <div className="flex items-center space-x-2 mr-2">
-            <span className="font-semibold">{categories?.find((cat) => cat.id === parseInt(categoryID))?.name}</span>
+            <span className="font-semibold">
+              {categories?.find((cat) => cat.id === parseInt(categoryID))?.name}
+            </span>
             <button onClick={clearCategoryFilter}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -107,7 +128,11 @@ const Properties = () => {
         {subcategoryID && (
           <div className="flex items-center space-x-2">
             <span className="font-semibold">
-              {subcategories?.find((subcat) => subcat.id === parseInt(subcategoryID))?.name}
+              {
+                subcategories?.find(
+                  (subcat) => subcat.id === parseInt(subcategoryID)
+                )?.name
+              }
             </span>
             <button onClick={clearSubcategoryFilter}>
               <svg
@@ -148,11 +173,7 @@ const Properties = () => {
       ) : (
         <NoData />
       )}
-      {isPending && (
-        <div className="flex justify-center items-center w-full h-[80vh]">
-          <Loader />
-        </div>
-      )}
+      {isPending && <Loader />}
     </div>
   );
 };
