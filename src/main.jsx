@@ -28,6 +28,7 @@ import CustomerAgreements from './pages/Customer/Agreements.jsx';
 import AgreementForm from './pages/Customer/AgreementForm.jsx';
 import AgreementDetail from './pages/AgreementDetail.jsx';
 import CustomerForm from './pages/Customer/CustomerForm.jsx';
+import ProfileUpdateForm from './pages/User/ProfileForm.jsx'
 
 export const queryClient = new QueryClient()
 const router = createBrowserRouter(createRoutesFromElements(
@@ -42,6 +43,7 @@ const router = createBrowserRouter(createRoutesFromElements(
       <Route path="customers" element={<Customers />} />
       <Route path="agreements" element={<Agreements />} />
       <Route path="agreements/:id" element={<AgreementDetail />} />
+      <Route path="profile/edit" element={<ProfileUpdateForm />} />
     </Route>
     <Route path="user" element={<Authenticated />}>
       <Route path="profile" element={<Profile />} />
@@ -49,6 +51,7 @@ const router = createBrowserRouter(createRoutesFromElements(
       <Route path="customers/create" element={<CustomerForm />} />
       <Route path="agreements/create" element={<AgreementForm />} />
       <Route path="agreements/:id" element={<AgreementDetail />} />
+      <Route path="profile/edit" element={<ProfileUpdateForm />} />
     </Route>
     <Route path="properties/:id" element={<PropertyDetail />} />
     <Route path="users/register" element={<Register />} />

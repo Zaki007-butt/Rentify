@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import useLocalStorage from "./useLocalStorage";
 import axios from "axios";
 import { BASE_URL } from "../config/config";
+import { getUserProfile } from "../apis/user.api";
 
 const AuthContext = createContext(undefined);
 
@@ -17,7 +18,9 @@ const AuthProvider = ({ children }) => {
     // Pre set token for every api call
     const authInterceptor = api.interceptors.request.use((config) => {
       config.headers.Authorization =
-        !config._retry && user.access ? `Bearer ${user.access}` : config.headers.Authorization;
+        !config._retry && user.access
+          ? `Bearer ${user.access}`
+          : config.headers.Authorization;
       return config;
     });
 
@@ -41,7 +44,9 @@ const AuthProvider = ({ children }) => {
         ) {
           try {
             console.log("Trying refresh...");
-            const res = await axios.post(`${BASE_URL}/refresh`, { refresh: user.refresh });
+            const res = await axios.post(`${BASE_URL}/refresh`, {
+              refresh: user.refresh,
+            });
             const userToken = res.data;
 
             setUser((prevUser) => ({
@@ -87,8 +92,27 @@ const AuthProvider = ({ children }) => {
     return user.payload;
   }
 
+  async function reloadUser() {
+    const { data: updatedUser } = await getUserProfile();
+    setUser((prevUser) => ({
+      ...prevUser,
+      payload: {
+        ...prevUser.payload,
+        name: updatedUser.name,
+        email: updatedUser.email,
+      },
+    }));
+  }
   return (
-    <AuthContext.Provider value={{ signInUser, signOutUser, currentUser, user: user.payload }}>
+    <AuthContext.Provider
+      value={{
+        signInUser,
+        signOutUser,
+        currentUser,
+        user: user.payload,
+        reloadUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
