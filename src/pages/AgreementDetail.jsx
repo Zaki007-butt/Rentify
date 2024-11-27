@@ -7,6 +7,7 @@ import PropertyDetailCard from "../components/cards/PropertyDetailCard";
 import { useAuth } from "../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
+import { useState } from "react";
 
 function AgreementDetail() {
   const { id } = useParams();
@@ -31,6 +32,9 @@ function AgreementDetail() {
       rent_start_date: new Date().toISOString().split("T")[0],
     },
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cancelDetails, setCancelDetails] = useState("");
 
   const onSubmit = async (data) => {
     const submitData = new FormData();
@@ -94,6 +98,29 @@ function AgreementDetail() {
       toast.success("Agreement rejected");
     } catch (error) {
       toast.error(error.message || "Failed to reject agreement");
+    }
+  };
+
+  const handleCancel = async () => {
+    if (!cancelDetails) {
+      toast.error("Please provide details before cancelling");
+      return;
+    }
+
+    try {
+      await updateAgreementMutation.mutateAsync({
+        id,
+        data: {
+          status: "cancelled",
+          property_id: agreement?.property?.id,
+          customer_id: agreement?.customer?.id,
+          details: cancelDetails, // Include the cancellation details
+        },
+      });
+      toast.success("Agreement cancelled");
+      setIsModalOpen(false); // Close the modal after successful cancellation
+    } catch (error) {
+      toast.error(error.message || "Failed to cancel agreement");
     }
   };
 
@@ -308,8 +335,8 @@ function AgreementDetail() {
             ) : (
               <>
                 <div className="bg-gray-100 rounded-lg shadow-md p-6 border border-gray-300 space-y-6">
-                  {agreement?.image && (
-                    <div className="bg-white rounded-lg p-4 border border-gray-200">
+                  {agreement?.status !== "cancelled" && agreement?.image && (
+                    <div className="bg-white rounded-lg p-4 border border-gray-200 relative">
                       <h3 className="font-bold text-gray-900 mb-3">Agreement Document</h3>
                       {agreement?.details && (
                         <p className="text-gray-700 whitespace-pre-wrap mb-4">{agreement.details}</p>
@@ -319,6 +346,44 @@ function AgreementDetail() {
                         alt="Agreement Document"
                         className="max-w-full h-auto rounded-lg border border-gray-300"
                       />
+                      {agreement?.property?.rent_or_buy === "rent" && (
+                        <button
+                          onClick={() => setIsModalOpen(true)}
+                          className="absolute top-4 right-4 px-4 py-2 bg-red-600 text-white rounded-lg"
+                        >
+                          Cancel
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Modal for Cancellation Details */}
+                  {isModalOpen && (
+                    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+                      <div className="bg-white rounded-lg p-6 w-1/3">
+                        <h3 className="text-lg font-bold mb-4">Cancel Agreement</h3>
+                        <textarea
+                          value={cancelDetails}
+                          onChange={(e) => setCancelDetails(e.target.value)}
+                          className="w-full border border-gray-300 rounded-md p-2 mb-4"
+                          rows="4"
+                          placeholder="Provide cancellation details..."
+                        />
+                        <div className="flex justify-end space-x-4">
+                          <button
+                            onClick={() => setIsModalOpen(false)}
+                            className="px-4 py-2 bg-gray-500 text-white rounded-lg"
+                          >
+                            Close
+                          </button>
+                          <button
+                            onClick={handleCancel}
+                            className="px-4 py-2 bg-red-600 text-white rounded-lg"
+                          >
+                            Confirm Cancel
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   )}
 
@@ -364,8 +429,9 @@ function AgreementDetail() {
                       </div>
                     </div>
                   ) : (
+                  
                     <div className="bg-white rounded-lg p-4 border border-gray-200">
-                      <h3 className="font-bold text-gray-900 mb-3">Rejection Details</h3>
+                      <h3 className="font-bold text-gray-900 mb-3">Details</h3>
                       <p className="text-rose-700 whitespace-pre-wrap mb-4">{agreement.details}</p>
                     </div>
                   )}
