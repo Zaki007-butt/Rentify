@@ -47,7 +47,6 @@ export const createProperty = async (propertyData) => {
 };
 
 export const updateProperty = async ({ id, ...propertyData }) => {
-  console.log("my data:", id, propertyData);
   const data = {
     ...propertyData,
   };

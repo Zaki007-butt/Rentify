@@ -1,5 +1,5 @@
-import { useMutation } from "@tanstack/react-query";
-import { createAgreement } from "../../apis/agreement.api";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createAgreement, updateAgreement } from "../../apis/agreement.api";
 import { queryClient } from "../../main";
 import { QUERY_KEYS } from "../constants/keys";
 import { toast } from "react-hot-toast";
@@ -18,5 +18,19 @@ export const useCreateAgreementMutation = () => {
     onError: (error) => {
       toast.error(error.message || "Failed to submit agreement request");
     },
+  });
+};
+
+export const useUpdateAgreementMutation = (id) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateAgreement,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.AGREEMENTS, id] });
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to update agreement");
+    }
   });
 };

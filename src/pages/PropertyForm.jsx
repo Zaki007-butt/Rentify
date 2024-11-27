@@ -1,13 +1,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import {
-  useCreatePropertyMutation,
-  useUpdatePropertyMutation,
-} from "../react-query/mutations/property.mutation"; // Import update mutation
-import {
-  useGetPropertiesCategories,
-  useGetSingleProperty,
-} from "../react-query/queries/property.queries";
+import { useCreatePropertyMutation, useUpdatePropertyMutation } from "../react-query/mutations/property.mutation"; // Import update mutation
+import { useGetPropertiesCategories, useGetSingleProperty } from "../react-query/queries/property.queries";
 import { useGetPropertyTypesQuery } from "../react-query/queries/property.queries";
 import { useNavigate, useParams } from "react-router-dom"; // useParams to get the property ID
 import toast from "react-hot-toast";
@@ -27,14 +21,14 @@ const PropertyForm = () => {
 
   const { mutateAsync: createProperty } = useCreatePropertyMutation();
   const { mutateAsync: updateProperty } = useUpdatePropertyMutation(id); // Define the update mutation
-  const { data: categories, isLoading: isLoadingCategories } =
-    useGetPropertiesCategories();
-  const { data: propertyTypes, isLoading: isLoadingPropertyTypes } =
-    useGetPropertyTypesQuery(selectedCategory, !!selectedCategory);
+  const { data: categories, isLoading: isLoadingCategories } = useGetPropertiesCategories();
+  const { data: propertyTypes, isLoading: isLoadingPropertyTypes } = useGetPropertyTypesQuery(
+    selectedCategory,
+    !!selectedCategory
+  );
 
   // Fetch existing property data
-  const { data: existingProperty, isLoading: isLoadingProperty } =
-    useGetSingleProperty(id);
+  const { data: existingProperty, isLoading: isLoadingProperty } = useGetSingleProperty(id);
 
   useEffect(() => {
     if (existingProperty) {
@@ -50,15 +44,14 @@ const PropertyForm = () => {
       setValue("property_category", existingProperty.property_category);
       setSelectedCategory(existingProperty.property_category);
       setValue("property_type", existingProperty.property_type);
+      setValue("rent_or_buy", existingProperty.rent_or_buy);
     }
   }, [existingProperty, setValue]);
 
   const onSubmit = async (formData) => {
     if (id) {
       // Update existing property
-      console.log("editing data:", formData);
       const updated = await updateProperty({ id, ...formData });
-      console.log("updated: ", updated);
       toast.success("Property Updated");
       navigate(`/admin/properties/${id}`);
     } else {
@@ -87,17 +80,12 @@ const PropertyForm = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-1">
-        {id ? "Edit Property" : "Add Property"}
-      </h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-1">{id ? "Edit Property" : "Add Property"}</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="w-1/2">
         {/* Form fields remain the same as before */}
         {/* Example for title */}
-        <label
-          htmlFor="title"
-          className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-        >
+        <label htmlFor="title" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
           Title
         </label>
         <input
@@ -113,14 +101,9 @@ const PropertyForm = () => {
           className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg"
           placeholder="Title"
         />
-        {errors.title && (
-          <span className="text-red-500">{errors.title.message}</span>
-        )}
+        {errors.title && <span className="text-red-500">{errors.title.message}</span>}
 
-        <label
-          htmlFor="description"
-          className="mb-2 mt-4 text-sm font-medium text-gray-900 sr-only dark:text-white"
-        >
+        <label htmlFor="description" className="mb-2 mt-4 text-sm font-medium text-gray-900 sr-only dark:text-white">
           Description
         </label>
         <textarea
@@ -130,14 +113,9 @@ const PropertyForm = () => {
           placeholder="Description"
           rows={6}
         />
-        {errors.description && (
-          <span className="text-red-500">{errors.description.message}</span>
-        )}
+        {errors.description && <span className="text-red-500">{errors.description.message}</span>}
 
-        <label
-          htmlFor="price"
-          className="mb-2 mt-4 text-sm font-medium text-gray-900 sr-only dark:text-white"
-        >
+        <label htmlFor="price" className="mb-2 mt-4 text-sm font-medium text-gray-900 sr-only dark:text-white">
           Price
         </label>
         <input
@@ -150,14 +128,9 @@ const PropertyForm = () => {
           className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
           placeholder="Price"
         />
-        {errors.price && (
-          <span className="text-red-500">{errors.price.message}</span>
-        )}
+        {errors.price && <span className="text-red-500">{errors.price.message}</span>}
 
-        <label
-          htmlFor="address"
-          className="mb-2 mt-4 text-sm font-medium text-gray-900 sr-only dark:text-white"
-        >
+        <label htmlFor="address" className="mb-2 mt-4 text-sm font-medium text-gray-900 sr-only dark:text-white">
           Address
         </label>
         <input
@@ -173,14 +146,9 @@ const PropertyForm = () => {
           className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
           placeholder="Address"
         />
-        {errors.address && (
-          <span className="text-red-500">{errors.address.message}</span>
-        )}
+        {errors.address && <span className="text-red-500">{errors.address.message}</span>}
 
-        <label
-          htmlFor="city"
-          className="mb-2 mt-4 text-sm font-medium text-gray-900 sr-only dark:text-white"
-        >
+        <label htmlFor="city" className="mb-2 mt-4 text-sm font-medium text-gray-900 sr-only dark:text-white">
           Address
         </label>
         <input
@@ -196,9 +164,7 @@ const PropertyForm = () => {
           className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
           placeholder="City"
         />
-        {errors.address && (
-          <span className="text-red-500">{errors.address.message}</span>
-        )}
+        {errors.address && <span className="text-red-500">{errors.address.message}</span>}
 
         <label
           htmlFor="property_category"
@@ -225,16 +191,9 @@ const PropertyForm = () => {
             ))
           )}
         </select>
-        {errors.property_category && (
-          <span className="text-red-500">
-            {errors.property_category.message}
-          </span>
-        )}
+        {errors.property_category && <span className="text-red-500">{errors.property_category.message}</span>}
 
-        <label
-          htmlFor="property_type"
-          className="mb-2 mt-4 text-sm font-medium text-gray-900 sr-only dark:text-white"
-        >
+        <label htmlFor="property_type" className="mb-2 mt-4 text-sm font-medium text-gray-900 sr-only dark:text-white">
           Property Type
         </label>
         <select
@@ -256,15 +215,10 @@ const PropertyForm = () => {
             ))
           )}
         </select>
-        {errors.property_type && (
-          <span className="text-red-500">{errors.property_type.message}</span>
-        )}
+        {errors.property_type && <span className="text-red-500">{errors.property_type.message}</span>}
 
         <div className="mt-2">
-          <label
-            htmlFor="area"
-            className="my-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-          >
+          <label htmlFor="area" className="my-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
             Area (sqft)
           </label>
           <input
@@ -276,18 +230,13 @@ const PropertyForm = () => {
             className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
             placeholder="Area (yard sq)"
           />
-          {errors.area && (
-            <span className="text-red-500">{errors.area.message}</span>
-          )}
+          {errors.area && <span className="text-red-500">{errors.area.message}</span>}
         </div>
 
         {selectedCategory != 2 && selectedCategory != 3 && (
           <div className="grid grid-cols-2 gap-2 mt-2">
             <div>
-              <label
-                htmlFor="bedroom"
-                className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-              >
+              <label htmlFor="bedroom" className="mb-2 text-sm font-medium text-gray-900">
                 Bedroom
               </label>
               <input
@@ -303,16 +252,10 @@ const PropertyForm = () => {
                 className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
                 placeholder="Bedroom"
               />
-              {errors.bedroom && (
-                <span className="text-red-500">{errors.bedroom.message}</span>
-              )}
+              {errors.bedroom && <span className="text-red-500">{errors.bedroom.message}</span>}
             </div>
-            <div></div>
             <div>
-              <label
-                htmlFor="washroom"
-                className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-              >
+              <label htmlFor="washroom" className="mb-2 text-sm font-medium text-gray-900">
                 Washroom
               </label>
               <input
@@ -328,18 +271,29 @@ const PropertyForm = () => {
                 className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
                 placeholder="Washroom"
               />
-              {errors.washroom && (
-                <span className="text-red-500">{errors.washroom.message}</span>
-              )}
+              {errors.washroom && <span className="text-red-500">{errors.washroom.message}</span>}
             </div>
           </div>
         )}
 
+        <label htmlFor="rent_or_buy" className="mb-2 mt-4 text-sm font-medium text-gray-900 sr-only dark:text-white">
+          Rent or Buy
+        </label>
+        <select
+          id="rent_or_buy"
+          {...register("rent_or_buy", {
+            defaultValue: "buy",
+            required: "Please select an option",
+          })}
+          className="block w-full p-4 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg"
+        >
+          <option value="buy">Buy</option>
+          <option value="rent">Rent</option>
+        </select>
+        {errors.rent_or_buy && <span className="text-red-500">{errors.rent_or_buy.message}</span>}
+
         <div className="flex gap-3 items-center">
-          <button
-            onClick={() => navigate(-1)}
-            className="mt-4 px-4 py-3 w-1/3 bg-blue-500 text-white rounded-lg"
-          >
+          <button onClick={() => navigate(-1)} className="mt-4 px-4 py-3 w-1/3 bg-blue-500 text-white rounded-lg">
             Cancel
           </button>
           <button

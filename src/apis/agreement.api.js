@@ -18,7 +18,8 @@ export const createAgreement = async (agreementData) => {
   return response.data;
 };
 
-export const updateAgreement = async ({ id, ...agreementData }) => {
+export const updateAgreement = async ({id, data: agreementData}) => {
+  console.log("my data:", id, agreementData);
   const response = await api.put(`/agreements/${id}/`, agreementData);
   return response.data;
 };

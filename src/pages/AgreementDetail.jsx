@@ -1,15 +1,101 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useGetSingleAgreement } from "../react-query/queries/agreement.queries";
+import { useUpdateAgreementMutation } from "../react-query/mutations/agreement.mutation";
 import Loader from "../components/shared/Loader";
 import { formatDate } from "../utilities/helpers";
 import PropertyDetailCard from "../components/cards/PropertyDetailCard";
 import { useAuth } from "../hooks/useAuth";
+import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 
 function AgreementDetail() {
   const { id } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { data: agreement, isPending, error } = useGetSingleAgreement(id);
+  const updateAgreementMutation = useUpdateAgreementMutation(id);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues
+  } = useForm({
+    defaultValues: {
+      image: null,
+      details: "",
+      purchase_amount: "",
+      purchase_date: new Date().toISOString().split("T")[0],
+      security_amount: "",
+      rent_amount: "",
+      rent_start_date: new Date().toISOString().split("T")[0],
+    },
+  });
+
+  const onSubmit = async (data) => {
+    const submitData = new FormData();
+    if (data.image?.[0]) submitData.append("image", data.image[0]);
+    submitData.append("details", data.details);
+    submitData.append("status", "active");
+    submitData.append("customer_id", agreement?.customer?.id);
+    submitData.append("property_id", agreement?.property?.id);
+
+    if (agreement?.property?.rent_or_buy === "buy") {
+      if (!data.purchase_amount || !data.purchase_date) {
+        toast.error("Please fill in all required fields");
+        return;
+      }
+      submitData.append("purchase_amount", data.purchase_amount);
+      submitData.append("purchase_date", data.purchase_date);
+    } else {
+      if (!data.security_amount || !data.rent_amount || !data.rent_start_date) {
+        toast.error("Please fill in all required fields");
+        return;
+      }
+      submitData.append("security_amount", data.security_amount);
+      submitData.append("rent_amount", data.rent_amount);
+      submitData.append("rent_start_date", data.rent_start_date);
+
+      // Calculate rent_end_date (1 month after rent_start_date)
+      const rentStartDate = new Date(data.rent_start_date);
+      const rentEndDate = new Date(rentStartDate.setMonth(rentStartDate.getMonth() + 1));
+      submitData.append("rent_end_date", rentEndDate.toISOString().split("T")[0]);
+    }
+
+    updateAgreementMutation
+      .mutateAsync({
+        id,
+        data: submitData,
+      })
+      .then(() => {
+        toast.success("Agreement approved successfully");
+      });
+  };
+
+  const handleReject = async () => {
+    // Get the details value from the form
+    const details = getValues().details;
+
+    if (!details) {
+      toast.error("Please provide details before rejecting");
+      return;
+    }
+
+    try {
+      await updateAgreementMutation.mutateAsync({
+        id,
+        data: {
+          status: "cancelled",
+          property_id: agreement?.property?.id,
+          customer_id: agreement?.customer?.id,
+          details: details, // Include the rejection details
+        },
+      });
+      toast.success("Agreement rejected");
+    } catch (error) {
+      toast.error(error.message || "Failed to reject agreement");
+    }
+  };
 
   if (isPending) {
     return <Loader />;
@@ -25,129 +111,267 @@ function AgreementDetail() {
         <button onClick={() => navigate(-1)} className="px-4 py-2 bg-slate-500 text-white rounded-lg">
           &lt;&ensp;Back
         </button>
+        <h2 className="text-2xl font-bold text-gray-900">Agreement Details</h2>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-gray-100 rounded-lg shadow-md p-6 border border-gray-300">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Agreement Details</h1>
-          <div className="space-y-4">
-            <div>
-              <span className="font-bold">Status: </span>
-              <span
-                className={`${
-                  agreement?.status === "pending"
-                    ? "text-amber-600"
-                    : agreement?.status === "active"
-                    ? "text-green-600"
-                    : agreement?.status === "cancelled"
-                    ? "text-red-600"
-                    : "text-blue-600"
-                }`}
-              >
-                {agreement?.status}
-              </span>
-            </div>
-            <div>
-              <span className="font-bold">Created At: </span>
-              <span>{formatDate(agreement?.created_at)}</span>
-            </div>
-            {agreement?.security_amount && (
-              <div>
-                <span className="font-bold">Security Amount: </span>
-                <span>${agreement.security_amount}</span>
+        <div className="bg-gray-100 rounded-lg shadow-md p-6 border border-gray-300 space-y-6">
+          {/* Agreement Status Section */}
+          <div className="bg-white rounded-lg p-4 border border-gray-200">
+            <h3 className="font-bold text-gray-900 mb-3">Agreement Status</h3>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">Status:</span>
+                <span
+                  className={`font-semibold ${
+                    agreement?.status === "pending"
+                      ? "text-amber-600"
+                      : agreement?.status === "active"
+                      ? "text-green-600"
+                      : agreement?.status === "cancelled"
+                      ? "text-red-600"
+                      : "text-blue-600"
+                  }`}
+                >
+                  {agreement?.status}
+                </span>
               </div>
-            )}
-            {agreement?.details && (
-              <div>
-                <span className="font-bold">Details: </span>
-                <p className="mt-1 text-gray-700">{agreement.details}</p>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">Created At:</span>
+                <span className="font-semibold text-gray-900">{formatDate(agreement?.created_at)}</span>
               </div>
-            )}
+            </div>
           </div>
-          <br />
-          <hr />
-          <br />
 
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Customer Details</h1>
-          <div className="space-y-4">
-            <div>
-              <span className="font-bold">Name: </span>
-              <span>{agreement?.user_details?.name}</span>
+          {/* Customer Details Section */}
+          <div className="bg-white rounded-lg p-4 border border-gray-200">
+            <h3 className="font-bold text-gray-900 mb-3">Customer Information</h3>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">Name:</span>
+                <span className="font-semibold text-gray-900">{agreement?.user_details?.name}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">Email:</span>
+                <span className="font-semibold text-gray-900">{agreement?.user_details?.email}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">CNIC:</span>
+                <span className="font-semibold text-gray-900">{agreement?.customer?.cnic}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">Phone Number:</span>
+                <span className="font-semibold text-gray-900">{agreement?.customer?.phone_number}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">Address:</span>
+                <span className="font-semibold text-gray-900">{agreement?.customer?.address}</span>
+              </div>
             </div>
-            <div>
-              <span className="font-bold">Email: </span>
-              <span>{agreement?.user_details?.email}</span>
-            </div>
-            <div>
-              <span className="font-bold">CNIC: </span>
-              <span>{agreement?.customer?.cnic}</span>
-            </div>
-            <div>
-              <span className="font-bold">Phone Number: </span>
-              <span>{agreement?.customer?.phone_number}</span>
-            </div>
-            <div>
-              <span className="font-bold">Address: </span>
-              <span>{agreement?.customer?.address}</span>
-            </div>
-            {agreement?.customer_note && (
-            <div className="my-4 bg-blue-100 rounded-lg shadow-md p-4 border border-sky-400">
-              <h3 className="text-lg font-bold text-sky-900 underline mb-2">Customer Note</h3>
-              <p className="text-sky-800">{agreement?.customer_note}</p>
+          </div>
+
+          {/* Customer Note Section */}
+          {agreement?.customer_note && (
+            <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <h3 className="font-bold text-gray-900 mb-3">Customer Note</h3>
+              <p className="text-gray-700 whitespace-pre-wrap">{agreement.customer_note}</p>
             </div>
           )}
-          </div>
         </div>
 
         <div>
-          
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Respond to Agreement</h2>
-          <div className="flex items-start justify-center w-full gap-4">
-            <div className="w-full">
-              <label
-                htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-400 border-dashed rounded-lg cursor-pointer bg-gray-100 hover:bg-gray-200"
-              >
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <svg
-                    className="w-8 h-8 mb-4 text-gray-600"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 20 16"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                    />
-                  </svg>
-                  <p className="mb-2 text-sm text-gray-600">
-                    <span className="font-semibold">Click to upload</span> or drag and drop
-                  </p>
-                  <p className="text-xs text-gray-600">PNG, JPG (MAX. 800x400px)</p>
+          <div>
+            {agreement?.status === "pending" ? (
+              <>
+                {/* <h2 className="text-2xl font-bold text-gray-900 mb-6">Respond to Agreement</h2> */}
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                  <div className="space-y-4">
+                    {/* Details */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Details</label>
+                      <textarea
+                        {...register("details", { required: "Details are required" })}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                        rows="4"
+                      />
+                      {errors.details && <span className="text-red-500 text-sm">{errors.details.message}</span>}
+                    </div>
+
+                    {/* Image Upload */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Agreement Image</label>
+                      <input
+                        type="file"
+                        {...register("image")}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                        accept="image/*"
+                      />
+                      {errors.image && <span className="text-red-500 text-sm">{errors.image.message}</span>}
+                    </div>
+
+                    {/* Conditional Fields based on rent_or_buy */}
+                    {agreement?.property?.rent_or_buy === "buy" ? (
+                      <>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Purchase Amount</label>
+                          <input
+                            type="number"
+                            {...register("purchase_amount", {
+                              required: "Purchase amount is required",
+                              min: { value: 0, message: "Amount must be positive" },
+                            })}
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                            step="0.01"
+                          />
+                          {errors.purchase_amount && (
+                            <span className="text-red-500 text-sm">{errors.purchase_amount.message}</span>
+                          )}
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Purchase Date</label>
+                          <input
+                            type="date"
+                            {...register("purchase_date", { required: "Purchase date is required" })}
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                          />
+                          {errors.purchase_date && (
+                            <span className="text-red-500 text-sm">{errors.purchase_date.message}</span>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Security Amount</label>
+                          <input
+                            type="number"
+                            {...register("security_amount", {
+                              required: "Security amount is required",
+                              min: { value: 0, message: "Amount must be positive" },
+                            })}
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                            step="0.01"
+                          />
+                          {errors.security_amount && (
+                            <span className="text-red-500 text-sm">{errors.security_amount.message}</span>
+                          )}
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Rent Amount</label>
+                          <input
+                            type="number"
+                            {...register("rent_amount", {
+                              required: "Rent amount is required",
+                              min: { value: 0, message: "Amount must be positive" },
+                            })}
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                            step="0.01"
+                          />
+                          {errors.rent_amount && (
+                            <span className="text-red-500 text-sm">{errors.rent_amount.message}</span>
+                          )}
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Rent Start Date</label>
+                          <input
+                            type="date"
+                            {...register("rent_start_date", { required: "Start date is required" })}
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                          />
+                          {errors.rent_start_date && (
+                            <span className="text-red-500 text-sm">{errors.rent_start_date.message}</span>
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="flex justify-end space-x-4">
+                    <button
+                      type="button"
+                      onClick={handleReject}
+                      className="px-4 py-2 bg-red-600 text-white rounded-lg"
+                      disabled={updateAgreementMutation.isPending}
+                    >
+                      {updateAgreementMutation.isPending ? "Rejecting..." : "Reject"}
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-4 py-2 bg-green-600 text-white rounded-lg"
+                      disabled={updateAgreementMutation.isPending}
+                    >
+                      {updateAgreementMutation.isPending ? "Approving..." : "Approve"}
+                    </button>
+                  </div>
+                </form>
+              </>
+            ) : (
+              <>
+                <div className="bg-gray-100 rounded-lg shadow-md p-6 border border-gray-300 space-y-6">
+                  {agreement?.image && (
+                    <div className="bg-white rounded-lg p-4 border border-gray-200">
+                      <h3 className="font-bold text-gray-900 mb-3">Agreement Document</h3>
+                      {agreement?.details && (
+                        <p className="text-gray-700 whitespace-pre-wrap mb-4">{agreement.details}</p>
+                      )}
+                      <img
+                        src={agreement.image}
+                        alt="Agreement Document"
+                        className="max-w-full h-auto rounded-lg border border-gray-300"
+                      />
+                    </div>
+                  )}
+
+                  {agreement?.status !== "cancelled" ? (
+                    <div className="bg-white rounded-lg p-4 border border-gray-200">
+                      <h3 className="font-bold text-gray-900 mb-3">
+                        {agreement?.property?.rent_or_buy === "buy" ? "Purchase Information" : "Rental Information"}
+                      </h3>
+                      <div className="space-y-3">
+                        {agreement?.property?.rent_or_buy === "buy" ? (
+                          <>
+                            <div className="flex items-center justify-between">
+                              <span className="text-gray-600">Purchase Amount:</span>
+                              <span className="font-semibold text-gray-900">${agreement.purchase_amount}</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-gray-600">Purchase Date:</span>
+                              <span className="font-semibold text-gray-900">{formatDate(agreement.purchase_date)}</span>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="flex items-center justify-between">
+                              <span className="text-gray-600">Rent Amount:</span>
+                              <span className="font-semibold text-gray-900">${agreement.rent_amount}</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-gray-600">Security Amount:</span>
+                              <span className="font-semibold text-gray-900">${agreement.security_amount}</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-gray-600">Rent Start Date:</span>
+                              <span className="font-semibold text-gray-900">
+                                {formatDate(agreement.rent_start_date)}
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-gray-600">Rent End Date:</span>
+                              <span className="font-semibold text-gray-900">{formatDate(agreement.rent_end_date)}</span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-white rounded-lg p-4 border border-gray-200">
+                      <h3 className="font-bold text-gray-900 mb-3">Rejection Details</h3>
+                      <p className="text-rose-700 whitespace-pre-wrap mb-4">{agreement.details}</p>
+                    </div>
+                  )}
                 </div>
-                <input id="dropzone-file" type="file" className="hidden" />
-              </label>
-            </div>
-
-            <div className="flex flex-col gap-5">
-              <button
-                onClick={() => navigate(`/admin/agreements/${id}/approve`)}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg mr-2"
-              >
-                Approve
-              </button>
-
-              <button
-                onClick={() => navigate(`/admin/agreements/${id}/reject`)}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg"
-              >
-                Reject
-              </button>
-            </div>
+              </>
+            )}
           </div>
         </div>
       </div>
