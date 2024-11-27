@@ -8,18 +8,14 @@ import { formatDate } from "../../utilities/helpers";
 
 const columns = [
   {
-    name: "Detail",
-    selector: (row) => row.details,
+    name: "Customer Note",
+    selector: (row) => row.customer_note || "N/A",
     sortable: true,
   },
   {
     name: "Created At",
     selector: (row) => row.created_at,
     sortable: true,
-  },
-  {
-    name: "Security Amount",
-    selector: (row) => row.security_amount,
   },
   {
     name: "Status",
@@ -78,9 +74,8 @@ function Agreements() {
       setTableData(
         response.data.results.map((agreement) => ({
           id: agreement.id,
-          details: agreement.details,
+          customer_note: agreement.customer_note || "N/A",
           created_at: formatDate(agreement.created_at),
-          security_amount: agreement.security_amount,
           status: agreement.status,
         }))
       );

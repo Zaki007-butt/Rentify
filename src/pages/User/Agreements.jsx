@@ -8,18 +8,14 @@ import { formatDate } from "../../utilities/helpers";
 
 const columns = [
   {
-    name: "Detail",
-    selector: (row) => row.details,
+    name: "Customer Note",
+    selector: (row) => row.customer_note || "N/A",
     sortable: true,
   },
   {
     name: "Created At",
     selector: (row) => row.created_at,
     sortable: true,
-  },
-  {
-    name: "Security Amount",
-    selector: (row) => row.security_amount,
   },
   {
     name: "Status",
@@ -61,11 +57,7 @@ function Agreements() {
     };
 
     return (
-      <FilterComponent
-        onFilter={(e) => setFilterText(e.target.value)}
-        onClear={handleClear}
-        filterText={filterText}
-      />
+      <FilterComponent onFilter={(e) => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />
     );
   }, [filterText, resetPaginationToggle]);
 
@@ -78,9 +70,8 @@ function Agreements() {
       setTableData(
         response.data.results.map((agreement) => ({
           id: agreement.id,
-          details: agreement.details,
+          customer_note: agreement.customer_note,
           created_at: formatDate(agreement.created_at),
-          security_amount: agreement.security_amount,
           status: agreement.status,
         }))
       );
@@ -90,20 +81,14 @@ function Agreements() {
   useEffect(() => {
     if (filterText !== "") {
       setTableData((prevData) =>
-        prevData.filter(
-          (property) =>
-            property.name &&
-            property.name.toLowerCase().includes(filterText.toLowerCase())
-        )
+        prevData.filter((property) => property.name && property.name.toLowerCase().includes(filterText.toLowerCase()))
       );
     }
   }, [filterText]);
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-1">
-        Agreements
-      </h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-1">Agreements</h1>
       {/* Properties Content */}
       {/* <Link
         to="/admin/agreements/create"
