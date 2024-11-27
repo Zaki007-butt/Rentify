@@ -51,7 +51,7 @@ const PropertyForm = () => {
   const onSubmit = async (formData) => {
     if (id) {
       // Update existing property
-      const updated = await updateProperty({ id, ...formData });
+      await updateProperty({ id, ...formData });
       toast.success("Property Updated");
       navigate(`/admin/properties/${id}`);
     } else {

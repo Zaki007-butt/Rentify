@@ -20,7 +20,7 @@ function AgreementDetail() {
     register,
     handleSubmit,
     formState: { errors },
-    getValues
+    getValues,
   } = useForm({
     defaultValues: {
       image: null,
@@ -208,9 +208,8 @@ function AgreementDetail() {
 
         <div>
           <div>
-            {agreement?.status === "pending" ? (
+            {agreement?.status === "pending" && user.is_admin ? (
               <>
-                {/* <h2 className="text-2xl font-bold text-gray-900 mb-6">Respond to Agreement</h2> */}
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                   <div className="space-y-4">
                     {/* Details */}
@@ -346,7 +345,7 @@ function AgreementDetail() {
                         alt="Agreement Document"
                         className="max-w-full h-auto rounded-lg border border-gray-300"
                       />
-                      {agreement?.property?.rent_or_buy === "rent" && (
+                      {agreement?.property?.rent_or_buy === "rent" && user.is_admin && (
                         <button
                           onClick={() => setIsModalOpen(true)}
                           className="absolute top-4 right-4 px-4 py-2 bg-red-600 text-white rounded-lg"
@@ -376,10 +375,7 @@ function AgreementDetail() {
                           >
                             Close
                           </button>
-                          <button
-                            onClick={handleCancel}
-                            className="px-4 py-2 bg-red-600 text-white rounded-lg"
-                          >
+                          <button onClick={handleCancel} className="px-4 py-2 bg-red-600 text-white rounded-lg">
                             Confirm Cancel
                           </button>
                         </div>
@@ -387,7 +383,7 @@ function AgreementDetail() {
                     </div>
                   )}
 
-                  {agreement?.status !== "cancelled" ? (
+                  {agreement?.status !== "cancelled" && (agreement.purchase_amount || agreement.rent_amount) ? (
                     <div className="bg-white rounded-lg p-4 border border-gray-200">
                       <h3 className="font-bold text-gray-900 mb-3">
                         {agreement?.property?.rent_or_buy === "buy" ? "Purchase Information" : "Rental Information"}
@@ -429,10 +425,9 @@ function AgreementDetail() {
                       </div>
                     </div>
                   ) : (
-                  
                     <div className="bg-white rounded-lg p-4 border border-gray-200">
                       <h3 className="font-bold text-gray-900 mb-3">Details</h3>
-                      <p className="text-rose-700 whitespace-pre-wrap mb-4">{agreement.details}</p>
+                      <p className="text-rose-700 whitespace-pre-wrap mb-4">{agreement.details || "N/A"}</p>
                     </div>
                   )}
                 </div>
@@ -442,12 +437,10 @@ function AgreementDetail() {
         </div>
       </div>
 
-      {user.is_admin && (
-        <div className="bg-gray-100 rounded-lg shadow-md p-6 my-8 border border-gray-300">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Property Details</h2>
-          <PropertyDetailCard property={agreement?.property} />
-        </div>
-      )}
+      <div className="bg-gray-100 rounded-lg shadow-md p-6 my-8 border border-gray-300">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Property Details</h2>
+        <PropertyDetailCard property={agreement?.property} />
+      </div>
     </div>
   );
 }
