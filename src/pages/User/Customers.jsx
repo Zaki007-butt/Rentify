@@ -12,6 +12,11 @@ const columns = [
     sortable: true,
   },
   {
+    name: "Email",
+    selector: (row) => row.user?.email || "N/A",
+    sortable: true,
+  },
+  {
     name: "CNIC",
     selector: (row) => row.cnic,
     sortable: true,
@@ -19,6 +24,11 @@ const columns = [
   {
     name: "Phone Number",
     selector: (row) => row.phone_number,
+    sortable: true,
+  },
+  {
+    name: "Agreements",
+    selector: (row) => row.agreements?.length || 0,
     sortable: true,
   }
 ];
@@ -48,7 +58,7 @@ function Customers() {
   }, [filterText, resetPaginationToggle]);
 
   const handleRowClick = (row) => {
-    navigate(`${row.id}`);
+    navigate(`/admin/customers/${row.id}`);
   };
 
   useEffect(() => {
@@ -58,7 +68,8 @@ function Customers() {
           id: customer.id,
           user: customer.user,
           cnic: customer.cnic,
-          phone_number: customer.phone_number
+          phone_number: customer.phone_number,
+          agreements: customer.agreements
         }))
       );
     }
@@ -69,6 +80,7 @@ function Customers() {
       setTableData((prevData) =>
         prevData.filter((customer) => 
           customer.user?.name?.toLowerCase().includes(filterText.toLowerCase()) ||
+          customer.user?.email?.toLowerCase().includes(filterText.toLowerCase()) ||
           customer.cnic?.toLowerCase().includes(filterText.toLowerCase()) ||
           customer.phone_number?.toLowerCase().includes(filterText.toLowerCase())
         )

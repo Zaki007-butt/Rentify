@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getCustomer, getActiveCustomers } from "../../apis/customer.api";
+import { getCustomer, getActiveCustomers, getCustomerById } from "../../apis/customer.api";
 import { QUERY_KEYS } from "../constants/keys";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -18,5 +18,13 @@ export const useGetActiveCustomers = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_ACTIVE_CUSTOMERS],
     queryFn: getActiveCustomers,
+  });
+};
+
+export const useGetCustomerById = (id) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.CUSTOMER, id],
+    queryFn: () => getCustomerById(id),
+    enabled: !!id
   });
 };
