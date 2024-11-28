@@ -90,7 +90,7 @@ function Customers() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-1">Active Customers</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-1">Customers</h1>
       <div className="p-4">
         {isPending ? (
           <Loader />
