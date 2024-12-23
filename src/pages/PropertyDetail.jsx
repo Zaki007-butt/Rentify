@@ -45,12 +45,14 @@ const PropertyDetail = () => {
           &lt;&ensp;Back
         </button>
 
-        <button
-          onClick={handleRequestAgreement}
-          className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
-        >
-          Request {property.rent_or_buy} agreement&ensp;&gt;
-        </button>
+        {user && user.is_admin ? null : (
+          <button
+            onClick={handleRequestAgreement}
+            className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
+          >
+            Request {property.rent_or_buy} agreement&ensp;&gt;
+          </button>
+        )}
       </div>
 
       <PropertyDetailCard property={property} />
