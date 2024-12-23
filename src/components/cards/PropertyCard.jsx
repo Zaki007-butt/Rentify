@@ -1,6 +1,7 @@
 import React from 'react'
+import { getImageUrl } from '../../utilities/helpers'
 
-const PropertyCard = ({ id, title, description, price, address, bedroom, washroom, area, property_category_name, rent_or_buy }) => {
+const PropertyCard = ({ id, title, description, images, price, address, bedroom, washroom, area, property_category_name, rent_or_buy }) => {
   return (
     <div class="relative mx-auto w-full">
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous" />
@@ -10,12 +11,13 @@ const PropertyCard = ({ id, title, description, price, address, bedroom, washroo
             <div class="w-full transform transition-transform duration-500 ease-in-out hover:scale-110">
               <div class="absolute inset-0 bg-black bg-opacity-80">
                 <img
-                  src="https://assets.entrepreneur.com/content/3x2/2000/20150622231001-for-sale-real-estate-home-house.jpeg?crop=16:9"
-                  alt="" />
+                  src={getImageUrl(images[0]?.image)}
+                  alt=""  
+                  className='object-cover h-full w-full'/>
               </div>
             </div>
 
-            <div class="absolute bottom-0 left-5 mb-3 flex">
+            {/* <div class="absolute bottom-0 left-5 mb-3 flex">
               <p class="flex items-center font-medium text-white shadow-sm">
                 <i class="fa fa-camera mr-2 text-xl text-white"></i>
                 10
@@ -25,14 +27,14 @@ const PropertyCard = ({ id, title, description, price, address, bedroom, washroo
               <p class="flex items-center font-medium text-gray-800">
                 <i class="fa fa-heart mr-2 text-2xl text-white"></i>
               </p>
-            </div>
+            </div> */}
 
             {
               property_category_name && <span class="absolute top-0 right-2 z-10 mt-3 ml-3 inline-flex select-none rounded-sm bg-[#1f93ff] px-2 py-1 text-xs font-semibold text-white">
               {property_category_name} </span>
             }
 
-            <span class="absolute top-0 left-0 z-10 mt-3 ml-3 inline-flex select-none rounded-lg bg-transparent px-3 py-2 text-lg font-medium text-white"> <i class="fa fa-star"></i> </span>
+            {/* <span class="absolute top-0 left-0 z-10 mt-3 ml-3 inline-flex select-none rounded-lg bg-transparent px-3 py-2 text-lg font-medium text-white"> <i class="fa fa-star"></i> </span> */}
           </div>
 
           <div class="mt-4">

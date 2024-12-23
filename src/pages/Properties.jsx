@@ -166,6 +166,7 @@ const Properties = () => {
                 area={property.area}
                 property_category_name={property.property_category_name}
                 rent_or_buy={property.rent_or_buy}
+                images={property.images}
               />
             </Link>
           ))}

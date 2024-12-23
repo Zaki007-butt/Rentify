@@ -39,19 +39,21 @@ export const getSingleProperty = async (propertyID) => {
 };
 
 export const createProperty = async (propertyData) => {
-  let data = {
-    ...propertyData,
-  };
-  const response = await api.post(`/properties/`, data);
-  return response;
+  const response = await api.post("/properties/", propertyData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
 };
 
-export const updateProperty = async ({ id, ...propertyData }) => {
-  const data = {
-    ...propertyData,
-  };
-  const response = await api.put(`/properties/${id}/`, data);
-  return response;
+export const updateProperty = async ({ id, data }) => {
+  const response = await api.put(`/properties/${id}/`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
 };
 
 export const deleteSingleProperty = async (propertyId) => {
