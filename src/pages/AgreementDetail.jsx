@@ -435,7 +435,7 @@ function AgreementDetail() {
                             Cancel
                           </button>
                         )}
-                      {agreement.status === "active" && (
+                      {agreement.status === "active" && user.is_admin && (
                         <button
                           onClick={() =>
                             navigate(`/admin/payments/create/${agreement.id}`)

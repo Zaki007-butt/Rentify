@@ -48,7 +48,7 @@ function CustomerDetail() {
         <h1 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-1">
           <button
             onClick={() => navigate(-1)}
-            className="px-4 py-2 bg-slate-500 text-white rounded-lg text-sm me-4"
+            className="px-4 py-2 bg-slate-500 text-white rounded-lg text-sm me-4 font-medium"
           >
             &lt;&ensp;Back
           </button>
