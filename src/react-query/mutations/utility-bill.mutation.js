@@ -27,7 +27,7 @@ export const useUpdateUtilityBillMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries([QUERY_KEYS.UTILITY_BILLS]);
       queryClient.invalidateQueries([QUERY_KEYS.CUSTOMER_UTILITY_BILLS]);
-      toast.success("Utility bill updated successfully");
+      toast.success("Utility bill paid successfully");
     },
     onError: (error) => {
       toast.error(error.message || "Failed to update utility bill");

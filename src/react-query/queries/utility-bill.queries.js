@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUtilityBillsByAgreement, getUtilityBillsByCustomer } from "../../apis/utility-bill.api";
+import { getUtilityBillsByAgreement, getUtilityBillsByCustomer, getUserUtilityBills } from "../../apis/utility-bill.api";
 import { QUERY_KEYS } from "../constants/keys";
 
 export const useGetUtilityBillsByAgreement = (agreementId) => {
@@ -17,3 +17,10 @@ export const useGetUtilityBillsByCustomer = (customerId) => {
     enabled: !!customerId,
   });
 }; 
+
+export const useGetUserUtilityBills = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.USER_UTILITY_BILLS],
+    queryFn: () => getUserUtilityBills(),
+  });
+};

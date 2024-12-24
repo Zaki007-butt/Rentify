@@ -39,6 +39,7 @@ function AgreementDetail() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cancelDetails, setCancelDetails] = useState("");
+  const [billAmount, setBillAmount] = useState({});
 
   const onSubmit = async (data) => {
     const submitData = new FormData();
@@ -439,16 +440,6 @@ function AgreementDetail() {
                             Cancel
                           </button>
                         )}
-                      {agreement.status === "active" && user.is_admin && (
-                        <button
-                          onClick={() =>
-                            navigate(`/admin/payments/create/${agreement.id}`)
-                          }
-                          className="px-3 py-1 mt-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                        >
-                          Add Payment
-                        </button>
-                      )}
                     </div>
                   )}
 
@@ -594,10 +585,10 @@ function AgreementDetail() {
       <div className="mt-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Utility Bills</h2>
         <div className="bg-white rounded-lg shadow p-6 space-y-4">
-          {utilityBills?.results?.length === 0 ? (
+          {!utilityBills?.results || utilityBills.results.length === 0 ? (
             <p className="text-gray-500">No utility bills found</p>
           ) : (
-            utilityBills?.results?.map((bill) => (
+            utilityBills.results.map((bill) => (
               <div
                 key={bill.id}
                 className={`p-4 rounded-lg border ${
@@ -647,21 +638,37 @@ function AgreementDetail() {
 
                   <div className="flex flex-col gap-2">
                     {!bill.paid_date && user?.is_admin && (
-                      <input
-                        type="number"
-                        step="0.01"
-                        placeholder="Enter amount"
-                        className="w-32 px-2 py-1 text-sm border rounded"
-                        onChange={(e) => {
-                          const amount = parseFloat(e.target.value);
-                          if (amount > 0) {
-                            updateUtilityBillMutation.mutate({
-                              id: bill.id,
-                              data: { paid_amount: amount }
-                            });
-                          }
-                        }}
-                      />
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          step="0.01"
+                          placeholder="Enter amount"
+                          className="w-32 px-2 py-1 text-sm border rounded"
+                          onChange={(e) => {
+                            const amount = parseFloat(e.target.value);
+                            if (amount > 0) {
+                              setBillAmount(prevState => ({
+                                ...prevState,
+                                [bill.id]: amount
+                              }));
+                            }
+                          }}
+                        />
+                        <button
+                          onClick={() => {
+                            const amount = billAmount[bill.id];
+                            if (amount > 0) {
+                              updateUtilityBillMutation.mutate({
+                                id: bill.id,
+                                data: { paid_amount: amount }
+                              });
+                            }
+                          }}
+                          className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700"
+                        >
+                          Pay
+                        </button>
+                      </div>
                     )}
                     {bill.bill_image && (
                       <a

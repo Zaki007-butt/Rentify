@@ -7,6 +7,7 @@ import { formatDate } from "../../utilities/helpers";
 import { Link } from "react-router-dom";
 import { useGetUtilityBillsByCustomer } from "../../react-query/queries/utility-bill.queries";
 import { useUpdateUtilityBillMutation } from "../../react-query/mutations/utility-bill.mutation";
+import { useState } from "react";
 
 function CustomerDetail() {
   const { id } = useParams();
@@ -17,6 +18,7 @@ function CustomerDetail() {
   const { data: utilityBills, isPending: isUtilityBillsPending } =
     useGetUtilityBillsByCustomer(id);
   const updateUtilityBillMutation = useUpdateUtilityBillMutation();
+  const [billAmount, setBillAmount] = useState({});
 
   if (!isUtilityBillsPending) {
     console.log("utilityBills", utilityBills);
@@ -346,7 +348,7 @@ function CustomerDetail() {
 
                       {!bill.paid_date && (
                         <div className="flex items-center gap-2">
-                          <div className="flex flex-col gap-2">
+                          <div className="flex items-center gap-2">
                             <input
                               type="number"
                               step="0.01"
@@ -355,13 +357,27 @@ function CustomerDetail() {
                               onChange={(e) => {
                                 const amount = parseFloat(e.target.value);
                                 if (amount > 0) {
-                                  updateUtilityBillMutation.mutate({
-                                    id: bill.id,
-                                    data: { paid_amount: amount },
-                                  });
+                                  setBillAmount(prevState => ({
+                                    ...prevState,
+                                    [bill.id]: amount
+                                  }));
                                 }
                               }}
                             />
+                            <button
+                              onClick={() => {
+                                const amount = billAmount[bill.id];
+                                if (amount > 0) {
+                                  updateUtilityBillMutation.mutate({
+                                    id: bill.id,
+                                    data: { paid_amount: amount }
+                                  });
+                                }
+                              }}
+                              className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700"
+                            >
+                              Pay
+                            </button>
                           </div>
                         </div>
                       )}

@@ -18,4 +18,9 @@ export const getUtilityBillsByAgreement = async (agreementId) => {
 export const getUtilityBillsByCustomer = async (customerId) => {
   const response = await api.get(`/utility-bills/?customer=${customerId}`);
   return response.data;
-}; 
+};
+
+export const getUserUtilityBills = async () => {
+  const response = await api.get(`/utility-bills/user/`);
+  return response.data;
+};

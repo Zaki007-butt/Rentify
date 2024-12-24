@@ -15,7 +15,8 @@ const UserLayout = ({ children }) => {
   else
     sideNavLinks.push(
       { children: "Agreements", to: "/user/agreements" },
-      { children: "Payments", to: "/user/payments" }
+      { children: "Payments", to: "/user/payments" },
+      { children: "Utility Bills", to: "/user/utility-bills" }
     );
 
   return (
@@ -32,7 +33,7 @@ const UserLayout = ({ children }) => {
               key={i}
               {...linkProps}
               className={`block w-full text-left px-4 py-2 rounded-lg ${
-                location.pathname.includes(linkProps.children.toLowerCase())
+                location.pathname.includes(linkProps.children.split(" ").join("-").toLowerCase())
                   ? "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-700"
               } hover:bg-blue-500 focus:bg-blue-600 hover:text-white transition`}
