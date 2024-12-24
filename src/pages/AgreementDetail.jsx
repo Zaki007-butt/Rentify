@@ -138,7 +138,7 @@ function AgreementDetail() {
         <button onClick={() => navigate(-1)} className="px-4 py-2 bg-slate-500 text-white rounded-lg">
           &lt;&ensp;Back
         </button>
-        <h2 className="text-2xl font-bold text-gray-900">Agreement Details</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Agreement # {agreement.id}</h2>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

@@ -7,6 +7,8 @@ export const QUERY_KEYS = {
   CUSTOMERS: "CUSTOMERS",
   GET_CUSTOMER: "GET_CUSTOMER",
   GET_ACTIVE_CUSTOMERS: "GET_ACTIVE_CUSTOMERS",
+  PAYMENTS: 'payments',
+  CUSTOMER_PAYMENTS: 'customer-payments',
 };
 
 // Constant declarations

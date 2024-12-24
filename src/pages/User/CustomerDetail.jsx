@@ -1,11 +1,17 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useGetCustomerById } from "../../react-query/queries/customer.queries";
 import Loader from "../../components/shared/Loader";
+import { useGetPaymentsByCustomer } from "../../react-query/queries/payment.queries";
+import { useUpdatePaymentMutation } from "../../react-query/mutations/payment.mutation";
+import { formatDate } from "../../utilities/helpers";
+import { Link } from "react-router-dom";
 
 function CustomerDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: customer, isPending } = useGetCustomerById(id);
+  const { data: payments } = useGetPaymentsByCustomer(id);
+  const updatePaymentMutation = useUpdatePaymentMutation();
 
   const getStatusStyles = (status) => {
     switch (status) {
@@ -51,7 +57,7 @@ function CustomerDetail() {
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-8">
           <div>
             <h2 className="text-lg font-semibold mb-4">Customer Information</h2>
             <div className="bg-white rounded-lg p-4 border border-gray-200">
@@ -92,44 +98,141 @@ function CustomerDetail() {
             </div>
           </div>
 
-          <div>
-            <h2 className="text-lg font-semibold mb-4">Agreements</h2>
-            <div className="space-y-4">
-              {customer?.agreements?.length > 0 ? (
-                customer.agreements.map((agreement) => {
-                  const statusStyle = getStatusStyles(agreement.status);
-                  return (
-                    <div
-                      key={agreement.id}
-                      className={`p-3 rounded-md ${statusStyle.container}`}
-                    >
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <span className="font-medium">
-                            Property: {agreement.property?.title || "N/A"}
-                          </span>
-                          <div className="text-sm text-gray-600 mt-1">
-                            Type:{" "}
-                            {agreement.property?.rent_or_buy?.toUpperCase() ||
-                              "N/A"}
-                          </div>
-                        </div>
-                        <span
-                          className={`px-2 py-1 rounded-full text-sm ${statusStyle.badge}`}
+          <div className="grid grid-cols-2 gap-8">
+            <div>
+              <h2 className="text-lg font-semibold mb-4">Agreements</h2>
+              <div className="space-y-4">
+                {customer?.agreements?.length > 0 ? (
+                  customer.agreements.map((agreement) => {
+                    const statusStyle = getStatusStyles(agreement.status);
+                    return (
+                      <div
+                        key={agreement.id}
+                        className={`p-3 rounded-md ${statusStyle.container}`}
+                      >
+                        <Link
+                          to={`/admin/agreements/${agreement.id}`}
+                          className="flex justify-between items-center"
                         >
-                          {agreement.status}
-                        </span>
+                          <span className="font-bold underline text-blue-500">
+                            Agreement # {agreement.id}
+                          </span>
+                        </Link>
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <span className="font-medium">
+                              <span className="font-bold">Property:</span>{" "}
+                              {agreement.property?.title || "N/A"}
+                            </span>
+                            <div className="text-sm text-gray-600 mt-1">
+                              <span className="font-bold">Type:</span>{" "}
+                              {agreement.property?.rent_or_buy?.toUpperCase() ||
+                                "N/A"}
+                            </div>
+                          </div>
+                          <span
+                            className={`px-2 py-1 rounded-full text-sm ${statusStyle.badge}`}
+                          >
+                            {agreement.status}
+                          </span>
+                        </div>
+                        <div className="text-sm text-gray-600 mt-1">
+                          Date:{" "}
+                          {new Date(agreement.created_at).toLocaleDateString()}
+                        </div>
+                        {agreement.status === "active" && (
+                          <button
+                            onClick={() =>
+                              navigate(`/admin/payments/create/${agreement.id}`)
+                            }
+                            className="px-3 py-1 mt-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                          >
+                            Add Payment
+                          </button>
+                        )}
                       </div>
-                      <div className="text-sm text-gray-600 mt-1">
-                        Date:{" "}
-                        {new Date(agreement.created_at).toLocaleDateString()}
+                    );
+                  })
+                ) : (
+                  <p className="text-gray-500">No agreements found</p>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <h2 className="text-lg font-semibold mb-4">Payments</h2>
+              <div className="space-y-4">
+                {payments?.results?.length === 0 && (
+                  <p className="text-gray-500 py-2">No payments yet</p>
+                )}
+                {payments?.results?.map((payment) => (
+                  <div
+                    key={payment.id}
+                    className={`p-4 rounded-lg border ${
+                      payment.status === "completed"
+                        ? "border-green-200 bg-green-50"
+                        : payment.status === "failed"
+                        ? "border-red-200 bg-red-50"
+                        : payment.status === "refunded"
+                        ? "border-yellow-200 bg-yellow-50"
+                        : "border-gray-200 bg-gray-50"
+                    }`}
+                  >
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="font-medium">Rs. {payment.amount}</p>
+                        <p className="text-sm text-gray-600">
+                          Method: {payment.method}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Date: {formatDate(payment.date)}
+                        </p>
+                        <hr className="my-2" />
+                        <p className="text-sm text-gray-600 mt-1">
+                          <span className="font-medium">For:</span>{" "}
+                          <Link
+                            to={`/admin/agreements/${payment.agreement_details.id}`}
+                            className="underline text-blue-600"
+                          >
+                            Agreement # {payment.agreement_details.id}
+                          </Link>
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {payment.status === "pending" ? (
+                          <select
+                            value={payment.status}
+                            onChange={(e) => {
+                              updatePaymentMutation.mutate({
+                                id: payment.id,
+                                data: { status: e.target.value },
+                              });
+                            }}
+                            className="rounded-md border-gray-300 text-sm"
+                          >
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                            <option value="failed">Failed</option>
+                            <option value="refunded">Refunded</option>
+                          </select>
+                        ) : (
+                          <span
+                            className={`px-2 py-1 rounded-full text-sm ${
+                              payment.status === "completed"
+                                ? "bg-green-100 text-green-800"
+                                : payment.status === "failed"
+                                ? "bg-red-100 text-red-800"
+                                : "bg-yellow-100 text-yellow-800"
+                            }`}
+                          >
+                            {payment.status}
+                          </span>
+                        )}
                       </div>
                     </div>
-                  );
-                })
-              ) : (
-                <p className="text-gray-500">No agreements found</p>
-              )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

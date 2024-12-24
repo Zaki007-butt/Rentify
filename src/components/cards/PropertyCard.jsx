@@ -54,19 +54,19 @@ const PropertyCard = ({ id, title, description, images, price, address, bedroom,
           <div class="justify-center">
             <div class="mt-4 flex space-x-3 overflow-hidden rounded-lg px-1 py-1">
               {
-                bedroom && <p class="flex items-center font-medium text-gray-800">
+                !!bedroom && <p class="flex items-center font-medium text-gray-800">
                   <i class="fa fa-bed mr-2 text-blue-900"></i>
                   {bedroom}
                 </p>
               }
               {
-                washroom && <p class="flex items-center font-medium text-gray-800">
+                !!washroom && <p class="flex items-center font-medium text-gray-800">
                   <i class="fa fa-bath mr-2 text-blue-900"></i>
                   {washroom}
                 </p>
               }
               {
-                area && <p class="flex items-center font-medium text-gray-800">
+                !!area && <p class="flex items-center font-medium text-gray-800">
                   <i class="fa fa-home mr-2 text-blue-900"></i>
                   {area} Yd<sup>2</sup>
                 </p>
@@ -74,7 +74,7 @@ const PropertyCard = ({ id, title, description, images, price, address, bedroom,
 
             </div>
           </div>
-          <div class="mt-8 grid grid-cols-2">
+          <div class="mt-8 grid grid-cols-2 hidden">
             <div class="flex items-center">
               <div class="relative">
                 <div class="h-6 w-6 rounded-full bg-gray-200 md:h-8 md:w-8"></div>
