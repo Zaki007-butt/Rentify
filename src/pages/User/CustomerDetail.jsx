@@ -173,8 +173,6 @@ function CustomerDetail() {
                         ? "border-green-200 bg-green-50"
                         : payment.status === "failed"
                         ? "border-red-200 bg-red-50"
-                        : payment.status === "refunded"
-                        ? "border-yellow-200 bg-yellow-50"
                         : "border-gray-200 bg-gray-50"
                     }`}
                   >
@@ -184,10 +182,21 @@ function CustomerDetail() {
                         <p className="text-sm text-gray-600">
                           Method: {payment.method}
                         </p>
-                        <p className="text-sm text-gray-600">
-                          Date: {formatDate(payment.date)}
-                        </p>
+                        {payment.status !== "pending" && payment.date && (
+                          <p className="text-sm text-gray-600">
+                            <span className="font-bold">
+                              {payment.status.charAt(0).toUpperCase() +
+                                payment.status.slice(1)}{" "}
+                              on:
+                            </span>{" "}
+                            {formatDate(payment.date)}
+                          </p>
+                        )}
                         <hr className="my-2" />
+                        <p className="text-sm text-gray-600 mt-1">
+                          <span className="font-medium">Created:</span>{" "}
+                          {formatDate(payment.created_at)}
+                        </p>
                         <p className="text-sm text-gray-600 mt-1">
                           <span className="font-medium">For:</span>{" "}
                           <Link
@@ -203,17 +212,27 @@ function CustomerDetail() {
                           <select
                             value={payment.status}
                             onChange={(e) => {
-                              updatePaymentMutation.mutate({
-                                id: payment.id,
-                                data: { status: e.target.value },
-                              });
+                              const newStatus = e.target.value;
+                              if (newStatus !== "pending") {
+                                updatePaymentMutation.mutate({
+                                  id: payment.id,
+                                  data: {
+                                    status: newStatus,
+                                    date: new Date().toISOString(),
+                                  },
+                                });
+                              } else {
+                                updatePaymentMutation.mutate({
+                                  id: payment.id,
+                                  data: { status: newStatus },
+                                });
+                              }
                             }}
                             className="rounded-md border-gray-300 text-sm"
                           >
                             <option value="pending">Pending</option>
                             <option value="completed">Completed</option>
                             <option value="failed">Failed</option>
-                            <option value="refunded">Refunded</option>
                           </select>
                         ) : (
                           <span
@@ -222,7 +241,7 @@ function CustomerDetail() {
                                 ? "bg-green-100 text-green-800"
                                 : payment.status === "failed"
                                 ? "bg-red-100 text-red-800"
-                                : "bg-yellow-100 text-yellow-800"
+                                : "bg-gray-100 text-gray-800"
                             }`}
                           >
                             {payment.status}
