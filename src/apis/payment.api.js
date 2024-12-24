@@ -18,4 +18,9 @@ export const getPaymentsByAgreement = async (agreementId) => {
 export const getPaymentsByCustomer = async (customerId) => {
   const response = await api.get(`/payments/?customer=${customerId}`);
   return response.data;
+};
+
+export const getUserPayments = async () => {
+  const response = await api.get('/payments/user/');
+  return response.data;
 }; 

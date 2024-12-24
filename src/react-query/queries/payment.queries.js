@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getPaymentsByAgreement, getPaymentsByCustomer } from "../../apis/payment.api";
+import { getPaymentsByAgreement, getPaymentsByCustomer, getUserPayments } from "../../apis/payment.api";
 import { QUERY_KEYS } from "../constants/keys";
 
 export const useGetPaymentsByAgreement = (agreementId) => {
@@ -15,5 +15,12 @@ export const useGetPaymentsByCustomer = (customerId) => {
     queryKey: [QUERY_KEYS.CUSTOMER_PAYMENTS, customerId],
     queryFn: () => getPaymentsByCustomer(customerId),
     enabled: !!customerId,
+  });
+};
+
+export const useGetUserPayments = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.USER_PAYMENTS],
+    queryFn: getUserPayments,
   });
 }; 

@@ -12,7 +12,11 @@ const UserLayout = ({ children }) => {
       { children: "Agreements", to: "/admin/agreements" },
       { children: "Customers", to: "/admin/customers" },
     );
-  else sideNavLinks.push({ children: "Agreements", to: "/user/agreements" });
+  else
+    sideNavLinks.push(
+      { children: "Agreements", to: "/user/agreements" },
+      { children: "Payments", to: "/user/payments" }
+    );
 
   return (
     <div className="min-h-screen flex">

@@ -31,6 +31,7 @@ import CustomerForm from './pages/Customer/CustomerForm.jsx';
 import ProfileUpdateForm from './pages/User/ProfileForm.jsx'
 import CustomerDetail from './pages/User/CustomerDetail.jsx'
 import PaymentForm from './pages/User/PaymentForm.jsx'
+import UserPayments from './pages/Customer/Payments'
 
 export const queryClient = new QueryClient()
 const router = createBrowserRouter(createRoutesFromElements(
@@ -56,6 +57,7 @@ const router = createBrowserRouter(createRoutesFromElements(
       <Route path="agreements/create" element={<AgreementForm />} />
       <Route path="agreements/:id" element={<AgreementDetail />} />
       <Route path="profile/edit" element={<ProfileUpdateForm />} />
+      <Route path="payments" element={<UserPayments />} />
     </Route>
     <Route path="properties/:id" element={<PropertyDetail />} />
     <Route path="users/register" element={<Register />} />
