@@ -8,6 +8,8 @@ import { useAuth } from "../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
+import { useGetUtilityBillsByAgreement } from "../react-query/queries/utility-bill.queries";
+import { useUpdateUtilityBillMutation } from "../react-query/mutations/utility-bill.mutation";
 
 function AgreementDetail() {
   const { id } = useParams();
@@ -15,6 +17,8 @@ function AgreementDetail() {
   const navigate = useNavigate();
   const { data: agreement, isPending, error } = useGetSingleAgreement(id);
   const updateAgreementMutation = useUpdateAgreementMutation(id);
+  const { data: utilityBills } = useGetUtilityBillsByAgreement(id);
+  const updateUtilityBillMutation = useUpdateUtilityBillMutation();
 
   const {
     register,
@@ -566,6 +570,115 @@ function AgreementDetail() {
           Property Details
         </h2>
         <PropertyDetailCard property={agreement?.property} />
+      </div>
+
+      {/* Add button next to existing buttons */}
+      {agreement?.status === "active" && user?.is_admin && (
+        <div className="flex gap-2 mt-4">
+          <button
+            onClick={() => navigate(`/admin/payments/create/${id}`)}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Add Payment
+          </button>
+          <button
+            onClick={() => navigate(`/admin/utility-bills/create/${id}`)}
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          >
+            Add Utility Bill
+          </button>
+        </div>
+      )}
+
+      {/* Add Utility Bills section */}
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Utility Bills</h2>
+        <div className="bg-white rounded-lg shadow p-6 space-y-4">
+          {utilityBills?.results?.length === 0 ? (
+            <p className="text-gray-500">No utility bills found</p>
+          ) : (
+            utilityBills?.results?.map((bill) => (
+              <div
+                key={bill.id}
+                className={`p-4 rounded-lg border ${
+                  bill.paid_date
+                    ? "border-green-200 bg-green-50"
+                    : new Date(bill.due_date) < new Date()
+                    ? "border-red-200 bg-red-50"
+                    : "border-gray-200 bg-gray-50"
+                }`}
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <p className="font-medium capitalize">{bill.bill_type} Bill</p>
+                      <span
+                        className={`px-2 py-1 text-xs rounded-full ${
+                          bill.paid_date
+                            ? "bg-green-100 text-green-800"
+                            : new Date(bill.due_date) < new Date()
+                            ? "bg-red-100 text-red-800"
+                            : "bg-yellow-100 text-yellow-800"
+                        }`}
+                      >
+                        {bill.paid_date ? "Paid" : "Unpaid"}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      Amount: Rs. {bill.bill_amount}
+                    </p>
+                    {bill.paid_date && (
+                      <p className="text-sm text-gray-600">
+                        Paid Amount: Rs. {bill.paid_amount}
+                      </p>
+                    )}
+                    <p className="text-sm text-gray-600">
+                      Bill Date: {formatDate(bill.bill_date)}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Due Date: {formatDate(bill.due_date)}
+                    </p>
+                    {bill.paid_date && (
+                      <p className="text-sm text-gray-600">
+                        Paid Date: {formatDate(bill.paid_date)}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    {!bill.paid_date && user?.is_admin && (
+                      <input
+                        type="number"
+                        step="0.01"
+                        placeholder="Enter amount"
+                        className="w-32 px-2 py-1 text-sm border rounded"
+                        onChange={(e) => {
+                          const amount = parseFloat(e.target.value);
+                          if (amount > 0) {
+                            updateUtilityBillMutation.mutate({
+                              id: bill.id,
+                              data: { paid_amount: amount }
+                            });
+                          }
+                        }}
+                      />
+                    )}
+                    {bill.bill_image && (
+                      <a
+                        href={bill.bill_image}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 text-sm"
+                      >
+                        View Bill
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
