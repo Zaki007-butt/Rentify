@@ -8,6 +8,11 @@ import { formatDate } from "../../utilities/helpers";
 
 const columns = [
   {
+    name: "ID",
+    selector: (row) => row.id,
+    sortable: true,
+  },
+  {
     name: "Customer Note",
     selector: (row) => row.customer_note || "N/A",
     sortable: true,

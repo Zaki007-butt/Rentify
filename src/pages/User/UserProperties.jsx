@@ -7,6 +7,7 @@ import FilterComponent from "../../components/TableFilter";
 import { PROPERTIES_PAGE_SIZE } from "../../react-query/constants/keys";
 
 const columns = [
+  
   {
     name: "Title",
     selector: (row) => row.title,
@@ -101,16 +102,19 @@ function UserProperties() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-1">
-        Properties
-      </h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold text-gray-800 border-b pb-1">
+          Properties
+        </h1>
+        <Link
+          to="/admin/properties/create"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          Add Property
+        </Link>
+      </div>
+  
       {/* Properties Content */}
-      <Link
-        to="/admin/properties/create"
-        className="mt-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-      >
-        Add Property
-      </Link>
       <div className="p-4">
         {isPending ? (
           <Loader />
@@ -128,7 +132,7 @@ function UserProperties() {
             subHeaderWrap
             highlightOnHover
             striped
-            paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+            paginationResetDefaultPage={resetPaginationToggle}
             subHeaderComponent={subHeaderComponentMemo}
             pointerOnHover
             onRowClicked={handleRowClick}
@@ -137,6 +141,10 @@ function UserProperties() {
       </div>
     </div>
   );
+  
 }
+
+
+
 
 export default UserProperties;

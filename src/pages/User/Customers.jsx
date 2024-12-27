@@ -102,15 +102,30 @@ function Customers() {
             direction="auto"
             fixedHeaderScrollHeight="300px"
             pagination
+            paginationComponentOptions={{
+              rowsPerPageText: 'Rows per page',
+              rangeSeparatorText: 'of',
+            }}
+            paginationPerPage={10}
+            paginationRowsPerPageOptions={[10, 20, 30, 50]}
+            paginationResetDefaultPage={resetPaginationToggle}
             responsive
             subHeaderAlign="right"
             subHeaderWrap
             highlightOnHover
             striped
-            paginationResetDefaultPage={resetPaginationToggle}
             subHeaderComponent={subHeaderComponentMemo}
             pointerOnHover
             onRowClicked={handleRowClick}
+            paginationComponent={() => (
+              <div className="flex justify-between items-center py-4">
+                <span className="text-sm text-gray-600">Showing {tableData.length} customers</span>
+                <div className="flex space-x-2">
+                  <button className="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition duration-300">Previous</button>
+                  <button className="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition duration-300">Next</button>
+                </div>
+              </div>
+            )}
           />
         )}
       </div>
