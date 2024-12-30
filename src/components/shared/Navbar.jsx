@@ -1,14 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faUser, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
 const Navbar = () => {
   const { user, signOutUser } = useAuth();
   const location = useLocation();
 
   return (
-    <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
+    <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600 shadow-lg transition-all">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link
           to="/"
@@ -23,34 +23,36 @@ const Navbar = () => {
             Rentify
           </span>
         </Link>
+
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse gap-x-2">
           {user ? (
             <>
               <Link
                 type="button"
                 to="/user/profile"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition-all"
               >
-                Dashboard {/*user.user_id*/}
+                <FontAwesomeIcon icon={faUser} className="mr-2" />
+                Dashboard
               </Link>
               <button
                 type="button"
                 onClick={signOutUser}
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="flex items-center text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 transition-all"
               >
+                <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
                 Logout
               </button>
             </>
           ) : (
-            <>
-              <Link
-                to="/users/login"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                Login
-              </Link>
-            </>
+            <Link
+              to="/users/login"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition-all"
+            >
+              Login
+            </Link>
           )}
+
           <button
             data-collapse-toggle="navbar-sticky"
             type="button"
@@ -76,6 +78,7 @@ const Navbar = () => {
             </svg>
           </button>
         </div>
+
         <div
           className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
           id="navbar-sticky"
@@ -84,7 +87,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/"
-                className={`block py-2 px-3 rounded md:bg-transparent md:p-0  md:hover:text-blue-600 ${
+                className={`block py-2 px-3 rounded-md transition-all md:bg-transparent md:p-0 md:hover:text-blue-600 ${
                   location.pathname === "/"
                     ? "text-white bg-blue-700 md:text-blue-700 md:dark:text-blue-500"
                     : "text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
@@ -97,7 +100,7 @@ const Navbar = () => {
             <li className="relative group">
               <Link
                 to="/properties"
-                className={`block py-2 px-3 text-gray-900 md:hover:text-blue-600 md:p-0 dark:text-white ${
+                className={`block py-2 px-3 text-gray-900 md:hover:text-blue-600 md:p-0 dark:text-white transition-all ${
                   location.pathname.includes("/properties")
                     ? "text-white md:text-blue-700 md:dark:text-blue-500"
                     : "md:dark:hover:text-blue-500"
@@ -107,8 +110,8 @@ const Navbar = () => {
                 <FontAwesomeIcon icon={faChevronDown} />
               </Link>
               {/* Dropdown menu */}
-              <div className="absolute hidden group-hover:block mt-0 w-40 pt-3">
-                <ul className="bg-white border border-gray-300 rounded-md shadow-lg dark:bg-gray-800">
+              <div className="absolute hidden group-hover:block mt-0 w-40 pt-3 rounded-md shadow-lg dark:bg-gray-800 bg-white transition-all z-10">
+                <ul className="border border-gray-300 rounded-md">
                   <li>
                     <Link
                       to="/properties?type=buy"

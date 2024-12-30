@@ -24,7 +24,7 @@ const Login = () => {
     if (mutation.isError) toast.error(mutation.error.message);
 
     if (mutation.isSuccess) {
-      toast.success("Logged in successful!");
+      toast.success("Logged in successfully!");
       signInUser(mutation.data.tokens);
       navigate("/user/profile");
     }
@@ -44,47 +44,52 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-5 text-center">Login</h2>
-        <form className="max-w-sm mx-auto" onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-5">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">
-              Your email
-            </label>
+      <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
+        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Login</h2>
+        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          {/* Email Input */}
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-900">Email</label>
             <input
               type="email"
               id="email"
               {...register("email", { required: "Email is required" })}
-              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              className="w-full p-4 mt-2 text-sm rounded-lg border border-gray-300 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="user@email.com"
               required
             />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+            {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
           </div>
-          <div className="mb-5">
-            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">
-              Your password
-            </label>
+
+          {/* Password Input */}
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-900">Password</label>
             <input
               type="password"
               id="password"
               {...register("password", { required: "Password is required" })}
-              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              className="w-full p-4 mt-2 text-sm rounded-lg border border-gray-300 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="password"
             />
-            {errors.password_confirmation && (
-              <p className="text-red-500 text-sm">{errors.password_confirmation.message}</p>
-            )}
+            {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={isSubmitting}
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className={`w-full p-3 text-white rounded-lg bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium text-lg ${isSubmitting && "opacity-50 cursor-not-allowed"}`}
           >
-            Login
+            {isSubmitting ? "Logging In..." : "Login"}
           </button>
-          <br />
-          <p className="mt-4">Don&apos;t have an account? <Link to="/users/register" className="text-blue-600 font-semibold hover:underline">Register</Link> </p>
+
+          {/* Register Link */}
+          <p className="mt-4 text-center text-sm text-gray-600">
+            Don't have an account?{" "}
+            <Link to="/users/register" className="text-blue-600 font-semibold hover:underline">
+              Register
+            </Link>
+          </p>
         </form>
       </div>
     </div>

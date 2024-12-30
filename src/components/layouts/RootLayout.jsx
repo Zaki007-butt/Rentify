@@ -9,7 +9,7 @@ const RootLayout = () => {
   return (
     <>
       <Navbar user={user} />
-      <div className="container mx-auto pt-16">
+      <div className="container mx-auto pt-20">
         <Outlet />
       </div>
       <Footer />
@@ -19,3 +19,7 @@ const RootLayout = () => {
 };
 
 export default RootLayout;
+
+
+
+ 
