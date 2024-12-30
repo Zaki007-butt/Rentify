@@ -32,7 +32,7 @@ function UtilityBillsList() {
 
       <div className="space-y-4">
         {!utilityBills?.results || utilityBills.results.length === 0 ? (
-          <p className="text-gray-500 py-5">No utility bills yet</p>
+          <p className="text-gray-500 py-8 text-center">No utility bills</p>
         ) : (
           utilityBills.results.map((bill) => (
             <div

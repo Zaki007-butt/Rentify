@@ -8,8 +8,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
-import { useGetUtilityBillsByAgreement } from "../react-query/queries/utility-bill.queries";
-import { useUpdateUtilityBillMutation } from "../react-query/mutations/utility-bill.mutation";
+import { FaPlus, FaArrowRight } from "react-icons/fa";
 
 function AgreementDetail() {
   const { id } = useParams();
@@ -17,8 +16,6 @@ function AgreementDetail() {
   const navigate = useNavigate();
   const { data: agreement, isPending, error } = useGetSingleAgreement(id);
   const updateAgreementMutation = useUpdateAgreementMutation(id);
-  const { data: utilityBills } = useGetUtilityBillsByAgreement(id);
-  const updateUtilityBillMutation = useUpdateUtilityBillMutation();
 
   const {
     register,
@@ -39,7 +36,6 @@ function AgreementDetail() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cancelDetails, setCancelDetails] = useState("");
-  const [billAmount, setBillAmount] = useState({});
 
   const onSubmit = async (data) => {
     const submitData = new FormData();
@@ -462,116 +458,46 @@ function AgreementDetail() {
         <PropertyDetailCard property={agreement?.property} />
       </div>
 
-      {/* Add button next to existing buttons */}
-      {agreement?.status === "active" && user?.is_admin && (
-        <div className="flex gap-2 mt-4">
-          <button
-            onClick={() => navigate(`/admin/agreements/${id}/payments/create`)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            Add Payment
-          </button>
-          <button
-            onClick={() => navigate(`/admin/agreements/${id}/utility-bills/create`)}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-          >
-            Add Utility Bill
-          </button>
+      {/* Add buttons for payments and utility bills */}
+      {agreement?.status === "active" || (agreement?.status === "cancelled" && user?.is_admin) ? (
+        <div className="mt-8">
+          <div className="flex gap-2">
+            {agreement?.status === "active" && (
+              <>
+                <button
+                  onClick={() => navigate(`/admin/agreements/${id}/payments/create`)}
+                  className="px-4 py-2 h-9 text-nowrap text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                >
+                  <FaPlus className="inline me-1" />
+                  Add Payment
+                </button>
+                <button
+                  onClick={() => navigate(`/admin/agreements/${id}/utility-bills/create`)}
+                  className="px-4 py-2 h-9 text-nowrap text-sm bg-green-600 text-white rounded-md hover:bg-green-700"
+                >
+                  <FaPlus className="inline me-1" />
+                  Add Utility Bill
+                </button>
+                <span className="text-gray-500">&nbsp;|&nbsp;</span>
+              </>
+            )}
+            <button
+              onClick={() => navigate(`/admin/agreements/${id}/utility-bills`)}
+              className="px-4 py-2 h-9 text-nowrap text-sm bg-purple-600 text-white rounded-md hover:bg-purple-700"
+            >
+              View Bills
+              <FaArrowRight className="inline ms-1" />
+            </button>
+            <button
+              onClick={() => navigate(`/admin/agreements/${id}/payments`)}
+              className="px-4 py-2 h-9 text-nowrap text-sm bg-yellow-600 text-white rounded-md hover:bg-yellow-700"
+            >
+              View Payments
+              <FaArrowRight className="inline ms-1" />
+            </button>
+          </div>
         </div>
-      )}
-
-      {/* Add Utility Bills section */}
-      <div className="mt-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Utility Bills</h2>
-        <div className="bg-white rounded-lg shadow p-6 space-y-4">
-          {!utilityBills?.results || utilityBills.results.length === 0 ? (
-            <p className="text-gray-500">No utility bills found</p>
-          ) : (
-            utilityBills.results.map((bill) => (
-              <div
-                key={bill.id}
-                className={`p-4 rounded-lg border ${
-                  bill.paid_date
-                    ? "border-green-200 bg-green-50"
-                    : new Date(bill.due_date) < new Date()
-                    ? "border-red-200 bg-red-50"
-                    : "border-gray-200 bg-gray-50"
-                }`}
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <p className="font-medium capitalize">{bill.bill_type} Bill</p>
-                      <span
-                        className={`px-2 py-1 text-xs rounded-full ${
-                          bill.paid_date
-                            ? "bg-green-100 text-green-800"
-                            : new Date(bill.due_date) < new Date()
-                            ? "bg-red-100 text-red-800"
-                            : "bg-yellow-100 text-yellow-800"
-                        }`}
-                      >
-                        {bill.paid_date ? "Paid" : "Unpaid"}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-600">Amount: Rs. {bill.bill_amount}</p>
-                    {bill.paid_date && <p className="text-sm text-gray-600">Paid Amount: Rs. {bill.paid_amount}</p>}
-                    <p className="text-sm text-gray-600">Bill Date: {formatDate(bill.bill_date)}</p>
-                    <p className="text-sm text-gray-600">Due Date: {formatDate(bill.due_date)}</p>
-                    {bill.paid_date && <p className="text-sm text-gray-600">Paid Date: {formatDate(bill.paid_date)}</p>}
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    {!bill.paid_date && user?.is_admin && (
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="number"
-                          step="0.01"
-                          placeholder="Enter amount"
-                          className="w-32 px-2 py-1 text-sm border rounded"
-                          onChange={(e) => {
-                            const amount = parseFloat(e.target.value);
-                            if (amount > 0) {
-                              setBillAmount((prevState) => ({
-                                ...prevState,
-                                [bill.id]: amount,
-                              }));
-                            }
-                          }}
-                        />
-                        <button
-                          onClick={() => {
-                            const amount = billAmount[bill.id];
-                            if (amount > 0) {
-                              updateUtilityBillMutation.mutate({
-                                id: bill.id,
-                                data: { paid_amount: amount },
-                              });
-                            }
-                          }}
-                          className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700"
-                        >
-                          Pay
-                        </button>
-                      </div>
-                    )}
-                    {bill.bill_image && (
-                      <a
-                        href={bill.bill_image}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800 text-sm"
-                      >
-                        View Bill
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
+      ) : null}
     </div>
   );
 }

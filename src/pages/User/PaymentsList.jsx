@@ -30,7 +30,7 @@ function PaymentsList() {
       </div>
 
       <div className="space-y-4">
-        {payments?.results?.length === 0 && <p className="text-gray-500 py-5">No payments yet</p>}
+        {payments?.results?.length === 0 && <p className="text-gray-500 py-8 text-center">No payments</p>}
         {payments?.results?.map((payment) => (
           <div
             key={payment.id}
