@@ -459,7 +459,7 @@ function AgreementDetail() {
       </div>
 
       {/* Add buttons for payments and utility bills */}
-      {agreement?.status === "active" || (agreement?.status === "cancelled" && user?.is_admin) ? (
+      {user?.is_admin && (agreement?.status === "active" || agreement?.status === "cancelled") ? (
         <div className="mt-8">
           <div className="flex gap-2">
             {agreement?.status === "active" && (
