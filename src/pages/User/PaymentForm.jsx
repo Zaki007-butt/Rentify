@@ -3,13 +3,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useGetSingleAgreement } from "../../react-query/queries/agreement.queries";
 import { useCreatePaymentMutation } from "../../react-query/mutations/payment.mutation";
 import Loader from "../../components/shared/Loader";
-import { formatDate } from "../../utilities/helpers";
+import { useEffect } from "react";
 
 const PaymentForm = () => {
-  const { agreementId } = useParams();
+  const { id: agreementId } = useParams();
   const navigate = useNavigate();
   const { data: agreement, isLoading } = useGetSingleAgreement(agreementId);
   const createPaymentMutation = useCreatePaymentMutation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const {
     register,
@@ -31,10 +35,7 @@ const PaymentForm = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-4">
-        <button
-          onClick={() => navigate(-1)}
-          className="px-4 py-2 bg-slate-500 text-white rounded-lg text-sm"
-        >
+        <button onClick={() => navigate(-1)} className="px-4 py-2 bg-slate-500 text-white rounded-lg text-sm">
           &lt;&ensp;Back
         </button>
       </div>
@@ -56,22 +57,15 @@ const PaymentForm = () => {
             </div>
             <div>
               <p className="text-gray-600">Amount</p>
-              <p className="font-semibold">
-                ${agreement.rent_amount || agreement.purchase_amount}
-              </p>
+              <p className="font-semibold">${agreement.rent_amount || agreement.purchase_amount}</p>
             </div>
           </div>
         </div>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="bg-white rounded-lg shadow p-6 flex-1"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-lg shadow p-6 flex-1">
           <h2 className="text-2xl font-bold mb-6">Add Payment</h2>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">
-              Amount
-            </label>
+            <label className="block text-sm font-medium text-gray-700">Amount</label>
             <input
               type="number"
               step="0.01"
@@ -81,17 +75,11 @@ const PaymentForm = () => {
               })}
               className="mt-1 block w-full py-2 rounded-md border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
-            {errors.amount && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.amount.message}
-              </p>
-            )}
+            {errors.amount && <p className="mt-1 text-sm text-red-600">{errors.amount.message}</p>}
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">
-              Payment Method
-            </label>
+            <label className="block text-sm font-medium text-gray-700">Payment Method</label>
             <select
               {...register("method", {
                 required: "Payment method is required",
@@ -103,11 +91,7 @@ const PaymentForm = () => {
               <option value="cheque">Cheque</option>
               <option value="other">Other</option>
             </select>
-            {errors.method && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.method.message}
-              </p>
-            )}
+            {errors.method && <p className="mt-1 text-sm text-red-600">{errors.method.message}</p>}
           </div>
 
           <div className="flex justify-end gap-4">

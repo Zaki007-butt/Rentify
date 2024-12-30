@@ -3,12 +3,17 @@ import { useGetPaymentsByAgreement } from "../../react-query/queries/payment.que
 import { useUpdatePaymentMutation } from "../../react-query/mutations/payment.mutation";
 import { formatDate } from "../../utilities/helpers";
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 function PaymentsList() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: payments } = useGetPaymentsByAgreement(id);
   const updatePaymentMutation = useUpdatePaymentMutation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="p-4">

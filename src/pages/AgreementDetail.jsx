@@ -67,13 +67,8 @@ function AgreementDetail() {
 
       // Calculate rent_end_date (1 month after rent_start_date)
       const rentStartDate = new Date(data.rent_start_date);
-      const rentEndDate = new Date(
-        rentStartDate.setMonth(rentStartDate.getMonth() + 1)
-      );
-      submitData.append(
-        "rent_end_date",
-        rentEndDate.toISOString().split("T")[0]
-      );
+      const rentEndDate = new Date(rentStartDate.setMonth(rentStartDate.getMonth() + 1));
+      submitData.append("rent_end_date", rentEndDate.toISOString().split("T")[0]);
     }
 
     updateAgreementMutation
@@ -145,15 +140,10 @@ function AgreementDetail() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between mb-4">
-        <button
-          onClick={() => navigate(-1)}
-          className="px-4 py-2 bg-slate-500 text-white rounded-lg"
-        >
+        <button onClick={() => navigate(-1)} className="px-4 py-2 bg-slate-500 text-white rounded-lg">
           &lt;&ensp;Back
         </button>
-        <h2 className="text-2xl font-bold text-gray-900">
-          Agreement # {agreement.id}
-        </h2>
+        <h2 className="text-2xl font-bold text-gray-900">Agreement # {agreement.id}</h2>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -180,48 +170,34 @@ function AgreementDetail() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-600">Created At:</span>
-                <span className="font-semibold text-gray-900">
-                  {formatDate(agreement?.created_at)}
-                </span>
+                <span className="font-semibold text-gray-900">{formatDate(agreement?.created_at)}</span>
               </div>
             </div>
           </div>
 
           {/* Customer Details Section */}
           <div className="bg-white rounded-lg p-4 border border-gray-200">
-            <h3 className="font-bold text-gray-900 mb-3">
-              Customer Information
-            </h3>
+            <h3 className="font-bold text-gray-900 mb-3">Customer Information</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-gray-600">Name:</span>
-                <span className="font-semibold text-gray-900">
-                  {agreement?.user_details?.name}
-                </span>
+                <span className="font-semibold text-gray-900">{agreement?.user_details?.name}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-600">Email:</span>
-                <span className="font-semibold text-gray-900">
-                  {agreement?.user_details?.email}
-                </span>
+                <span className="font-semibold text-gray-900">{agreement?.user_details?.email}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-600">CNIC:</span>
-                <span className="font-semibold text-gray-900">
-                  {agreement?.customer?.cnic}
-                </span>
+                <span className="font-semibold text-gray-900">{agreement?.customer?.cnic}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-600">Phone Number:</span>
-                <span className="font-semibold text-gray-900">
-                  {agreement?.customer?.phone_number}
-                </span>
+                <span className="font-semibold text-gray-900">{agreement?.customer?.phone_number}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-600">Address:</span>
-                <span className="font-semibold text-gray-900">
-                  {agreement?.customer?.address}
-                </span>
+                <span className="font-semibold text-gray-900">{agreement?.customer?.address}</span>
               </div>
             </div>
           </div>
@@ -230,9 +206,7 @@ function AgreementDetail() {
           {agreement?.customer_note && (
             <div className="bg-white rounded-lg p-4 border border-gray-200">
               <h3 className="font-bold text-gray-900 mb-3">Customer Note</h3>
-              <p className="text-gray-700 whitespace-pre-wrap">
-                {agreement.customer_note}
-              </p>
+              <p className="text-gray-700 whitespace-pre-wrap">{agreement.customer_note}</p>
             </div>
           )}
         </div>
@@ -245,9 +219,7 @@ function AgreementDetail() {
                   <div className="space-y-4">
                     {/* Details */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Details
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700">Details</label>
                       <textarea
                         {...register("details", {
                           required: "Details are required",
@@ -255,38 +227,26 @@ function AgreementDetail() {
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                         rows="4"
                       />
-                      {errors.details && (
-                        <span className="text-red-500 text-sm">
-                          {errors.details.message}
-                        </span>
-                      )}
+                      {errors.details && <span className="text-red-500 text-sm">{errors.details.message}</span>}
                     </div>
 
                     {/* Image Upload */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Agreement Image
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700">Agreement Image</label>
                       <input
                         type="file"
                         {...register("image")}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                         accept="image/*"
                       />
-                      {errors.image && (
-                        <span className="text-red-500 text-sm">
-                          {errors.image.message}
-                        </span>
-                      )}
+                      {errors.image && <span className="text-red-500 text-sm">{errors.image.message}</span>}
                     </div>
 
                     {/* Conditional Fields based on rent_or_buy */}
                     {agreement?.property?.rent_or_buy === "buy" ? (
                       <>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700">
-                            Purchase Amount
-                          </label>
+                          <label className="block text-sm font-medium text-gray-700">Purchase Amount</label>
                           <input
                             type="number"
                             {...register("purchase_amount", {
@@ -300,15 +260,11 @@ function AgreementDetail() {
                             step="0.01"
                           />
                           {errors.purchase_amount && (
-                            <span className="text-red-500 text-sm">
-                              {errors.purchase_amount.message}
-                            </span>
+                            <span className="text-red-500 text-sm">{errors.purchase_amount.message}</span>
                           )}
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700">
-                            Purchase Date
-                          </label>
+                          <label className="block text-sm font-medium text-gray-700">Purchase Date</label>
                           <input
                             type="date"
                             {...register("purchase_date", {
@@ -317,18 +273,14 @@ function AgreementDetail() {
                             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                           />
                           {errors.purchase_date && (
-                            <span className="text-red-500 text-sm">
-                              {errors.purchase_date.message}
-                            </span>
+                            <span className="text-red-500 text-sm">{errors.purchase_date.message}</span>
                           )}
                         </div>
                       </>
                     ) : (
                       <>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700">
-                            Security Amount
-                          </label>
+                          <label className="block text-sm font-medium text-gray-700">Security Amount</label>
                           <input
                             type="number"
                             {...register("security_amount", {
@@ -342,15 +294,11 @@ function AgreementDetail() {
                             step="0.01"
                           />
                           {errors.security_amount && (
-                            <span className="text-red-500 text-sm">
-                              {errors.security_amount.message}
-                            </span>
+                            <span className="text-red-500 text-sm">{errors.security_amount.message}</span>
                           )}
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700">
-                            Rent Amount
-                          </label>
+                          <label className="block text-sm font-medium text-gray-700">Rent Amount</label>
                           <input
                             type="number"
                             {...register("rent_amount", {
@@ -364,15 +312,11 @@ function AgreementDetail() {
                             step="0.01"
                           />
                           {errors.rent_amount && (
-                            <span className="text-red-500 text-sm">
-                              {errors.rent_amount.message}
-                            </span>
+                            <span className="text-red-500 text-sm">{errors.rent_amount.message}</span>
                           )}
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700">
-                            Rent Start Date
-                          </label>
+                          <label className="block text-sm font-medium text-gray-700">Rent Start Date</label>
                           <input
                             type="date"
                             {...register("rent_start_date", {
@@ -381,9 +325,7 @@ function AgreementDetail() {
                             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                           />
                           {errors.rent_start_date && (
-                            <span className="text-red-500 text-sm">
-                              {errors.rent_start_date.message}
-                            </span>
+                            <span className="text-red-500 text-sm">{errors.rent_start_date.message}</span>
                           )}
                         </div>
                       </>
@@ -397,18 +339,14 @@ function AgreementDetail() {
                       className="px-4 py-2 bg-red-600 text-white rounded-lg"
                       disabled={updateAgreementMutation.isPending}
                     >
-                      {updateAgreementMutation.isPending
-                        ? "Rejecting..."
-                        : "Reject"}
+                      {updateAgreementMutation.isPending ? "Rejecting..." : "Reject"}
                     </button>
                     <button
                       type="submit"
                       className="px-4 py-2 bg-green-600 text-white rounded-lg"
                       disabled={updateAgreementMutation.isPending}
                     >
-                      {updateAgreementMutation.isPending
-                        ? "Approving..."
-                        : "Approve"}
+                      {updateAgreementMutation.isPending ? "Approving..." : "Approve"}
                     </button>
                   </div>
                 </form>
@@ -418,28 +356,23 @@ function AgreementDetail() {
                 <div className="bg-gray-100 rounded-lg shadow-md p-6 border border-gray-300 space-y-6">
                   {agreement?.status !== "cancelled" && agreement?.image && (
                     <div className="bg-white rounded-lg p-4 border border-gray-200 relative">
-                      <h3 className="font-bold text-gray-900 mb-3">
-                        Agreement Document
-                      </h3>
+                      <h3 className="font-bold text-gray-900 mb-3">Agreement Document</h3>
                       {agreement?.details && (
-                        <p className="text-gray-700 whitespace-pre-wrap mb-4">
-                          {agreement.details}
-                        </p>
+                        <p className="text-gray-700 whitespace-pre-wrap mb-4">{agreement.details}</p>
                       )}
                       <img
                         src={agreement.image}
                         alt="Agreement Document"
                         className="max-w-full h-auto rounded-lg border border-gray-300"
                       />
-                      {agreement?.property?.rent_or_buy === "rent" &&
-                        user.is_admin && (
-                          <button
-                            onClick={() => setIsModalOpen(true)}
-                            className="absolute top-4 right-4 px-4 py-2 bg-red-600 text-white rounded-lg"
-                          >
-                            Cancel
-                          </button>
-                        )}
+                      {agreement?.property?.rent_or_buy === "rent" && user.is_admin && (
+                        <button
+                          onClick={() => setIsModalOpen(true)}
+                          className="absolute top-4 right-4 px-4 py-2 bg-red-600 text-white rounded-lg"
+                        >
+                          Cancel
+                        </button>
+                      )}
                     </div>
                   )}
 
@@ -447,9 +380,7 @@ function AgreementDetail() {
                   {isModalOpen && (
                     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
                       <div className="bg-white rounded-lg p-6 w-1/3">
-                        <h3 className="text-lg font-bold mb-4">
-                          Cancel Agreement
-                        </h3>
+                        <h3 className="text-lg font-bold mb-4">Cancel Agreement</h3>
                         <textarea
                           value={cancelDetails}
                           onChange={(e) => setCancelDetails(e.target.value)}
@@ -464,10 +395,7 @@ function AgreementDetail() {
                           >
                             Close
                           </button>
-                          <button
-                            onClick={handleCancel}
-                            className="px-4 py-2 bg-red-600 text-white rounded-lg"
-                          >
+                          <button onClick={handleCancel} className="px-4 py-2 bg-red-600 text-white rounded-lg">
                             Confirm Cancel
                           </button>
                         </div>
@@ -475,67 +403,42 @@ function AgreementDetail() {
                     </div>
                   )}
 
-                  {agreement?.status !== "cancelled" &&
-                  (agreement.purchase_amount || agreement.rent_amount) ? (
+                  {agreement?.status !== "cancelled" && (agreement.purchase_amount || agreement.rent_amount) ? (
                     <div className="bg-white rounded-lg p-4 border border-gray-200">
                       <h3 className="font-bold text-gray-900 mb-3">
-                        {agreement?.property?.rent_or_buy === "buy"
-                          ? "Purchase Information"
-                          : "Rental Information"}
+                        {agreement?.property?.rent_or_buy === "buy" ? "Purchase Information" : "Rental Information"}
                       </h3>
                       <div className="space-y-3">
                         {agreement?.property?.rent_or_buy === "buy" ? (
                           <>
                             <div className="flex items-center justify-between">
-                              <span className="text-gray-600">
-                                Purchase Amount:
-                              </span>
-                              <span className="font-semibold text-gray-900">
-                                ${agreement.purchase_amount}
-                              </span>
+                              <span className="text-gray-600">Purchase Amount:</span>
+                              <span className="font-semibold text-gray-900">${agreement.purchase_amount}</span>
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="text-gray-600">
-                                Purchase Date:
-                              </span>
-                              <span className="font-semibold text-gray-900">
-                                {formatDate(agreement.purchase_date)}
-                              </span>
+                              <span className="text-gray-600">Purchase Date:</span>
+                              <span className="font-semibold text-gray-900">{formatDate(agreement.purchase_date)}</span>
                             </div>
                           </>
                         ) : (
                           <>
                             <div className="flex items-center justify-between">
-                              <span className="text-gray-600">
-                                Rent Amount:
-                              </span>
-                              <span className="font-semibold text-gray-900">
-                                ${agreement.rent_amount}
-                              </span>
+                              <span className="text-gray-600">Rent Amount:</span>
+                              <span className="font-semibold text-gray-900">${agreement.rent_amount}</span>
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="text-gray-600">
-                                Security Amount:
-                              </span>
-                              <span className="font-semibold text-gray-900">
-                                ${agreement.security_amount}
-                              </span>
+                              <span className="text-gray-600">Security Amount:</span>
+                              <span className="font-semibold text-gray-900">${agreement.security_amount}</span>
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="text-gray-600">
-                                Rent Start Date:
-                              </span>
+                              <span className="text-gray-600">Rent Start Date:</span>
                               <span className="font-semibold text-gray-900">
                                 {formatDate(agreement.rent_start_date)}
                               </span>
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="text-gray-600">
-                                Rent End Date:
-                              </span>
-                              <span className="font-semibold text-gray-900">
-                                {formatDate(agreement.rent_end_date)}
-                              </span>
+                              <span className="text-gray-600">Rent End Date:</span>
+                              <span className="font-semibold text-gray-900">{formatDate(agreement.rent_end_date)}</span>
                             </div>
                           </>
                         )}
@@ -544,9 +447,7 @@ function AgreementDetail() {
                   ) : (
                     <div className="bg-white rounded-lg p-4 border border-gray-200">
                       <h3 className="font-bold text-gray-900 mb-3">Details</h3>
-                      <p className="text-rose-700 whitespace-pre-wrap mb-4">
-                        {agreement.details || "N/A"}
-                      </p>
+                      <p className="text-rose-700 whitespace-pre-wrap mb-4">{agreement.details || "N/A"}</p>
                     </div>
                   )}
                 </div>
@@ -557,9 +458,7 @@ function AgreementDetail() {
       </div>
 
       <div className="bg-gray-100 rounded-lg shadow-md p-6 my-8 border border-gray-300">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
-          Property Details
-        </h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Property Details</h2>
         <PropertyDetailCard property={agreement?.property} />
       </div>
 
@@ -567,13 +466,13 @@ function AgreementDetail() {
       {agreement?.status === "active" && user?.is_admin && (
         <div className="flex gap-2 mt-4">
           <button
-            onClick={() => navigate(`/admin/payments/create/${id}`)}
+            onClick={() => navigate(`/admin/agreements/${id}/payments/create`)}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
             Add Payment
           </button>
           <button
-            onClick={() => navigate(`/admin/utility-bills/create/${id}`)}
+            onClick={() => navigate(`/admin/agreements/${id}/utility-bills/create`)}
             className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
           >
             Add Utility Bill
@@ -615,25 +514,11 @@ function AgreementDetail() {
                         {bill.paid_date ? "Paid" : "Unpaid"}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600">
-                      Amount: Rs. {bill.bill_amount}
-                    </p>
-                    {bill.paid_date && (
-                      <p className="text-sm text-gray-600">
-                        Paid Amount: Rs. {bill.paid_amount}
-                      </p>
-                    )}
-                    <p className="text-sm text-gray-600">
-                      Bill Date: {formatDate(bill.bill_date)}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Due Date: {formatDate(bill.due_date)}
-                    </p>
-                    {bill.paid_date && (
-                      <p className="text-sm text-gray-600">
-                        Paid Date: {formatDate(bill.paid_date)}
-                      </p>
-                    )}
+                    <p className="text-sm text-gray-600">Amount: Rs. {bill.bill_amount}</p>
+                    {bill.paid_date && <p className="text-sm text-gray-600">Paid Amount: Rs. {bill.paid_amount}</p>}
+                    <p className="text-sm text-gray-600">Bill Date: {formatDate(bill.bill_date)}</p>
+                    <p className="text-sm text-gray-600">Due Date: {formatDate(bill.due_date)}</p>
+                    {bill.paid_date && <p className="text-sm text-gray-600">Paid Date: {formatDate(bill.paid_date)}</p>}
                   </div>
 
                   <div className="flex flex-col gap-2">
@@ -647,9 +532,9 @@ function AgreementDetail() {
                           onChange={(e) => {
                             const amount = parseFloat(e.target.value);
                             if (amount > 0) {
-                              setBillAmount(prevState => ({
+                              setBillAmount((prevState) => ({
                                 ...prevState,
-                                [bill.id]: amount
+                                [bill.id]: amount,
                               }));
                             }
                           }}
@@ -660,7 +545,7 @@ function AgreementDetail() {
                             if (amount > 0) {
                               updateUtilityBillMutation.mutate({
                                 id: bill.id,
-                                data: { paid_amount: amount }
+                                data: { paid_amount: amount },
                               });
                             }
                           }}
