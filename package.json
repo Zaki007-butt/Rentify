@@ -1,12 +1,13 @@
 {
   "name": "real-estate-client",
+  "homepage": "https://muhammadzeeshanyousaf.github.io/RealEstate-Frontend/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://MuhammadZeeshanYousaf.github.io/RealEstate-Frontend",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
