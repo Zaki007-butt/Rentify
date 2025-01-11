@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useAuth } from "../../hooks/useAuth";
+import defaultAvatar from "../../assets/default-avatar.png";
 
 const Profile = () => {
   const { user } = useAuth();
@@ -34,11 +35,16 @@ const Profile = () => {
         ) : (
           userData && (
             <div className="flex flex-col items-center">
-              <img
-                className="w-24 h-24 rounded-full shadow-md"
-                src="https://via.placeholder.com/150"
-                alt="Profile Avatar"
-              />
+              <div className="relative">
+                <img
+                  className="w-24 h-24 rounded-full shadow-md object-cover"
+                  src={userData.data.avatar || defaultAvatar}
+                  alt="Profile Avatar"
+                  onError={(e) => {
+                    e.target.src = defaultAvatar;
+                  }}
+                />
+              </div>
               <h2 className="text-xl font-semibold mt-4 text-gray-800">
                 {userData.data.name}
               </h2>

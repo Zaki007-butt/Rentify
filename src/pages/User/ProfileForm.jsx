@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useUpdateProfileMutation } from "../../react-query/mutations/auth.mutation";
 import { useUpdatePasswordMutation } from "../../react-query/mutations/auth.mutation";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { FaCamera } from "react-icons/fa";
+import defaultAvatar from "../../assets/default-avatar.png";
 
 function ProfileUpdateForm() {
   const { user } = useAuth();
@@ -27,9 +29,27 @@ function ProfileUpdateForm() {
   const { mutateAsync: updateUser } = useUpdateProfileMutation();
   const { mutateAsync: updatePassword } = useUpdatePasswordMutation();
 
+  const [avatarPreview, setAvatarPreview] = useState(user.avatar || null);
+  const fileInputRef = useRef(null);
+
+  const handleAvatarChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setAvatarPreview(URL.createObjectURL(file));
+    }
+  };
+
   const handleUpdate = async (data) => {
     try {
-      await updateUser({ name: data.name, email: data.email });
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('email', data.email);
+      
+      if (fileInputRef.current?.files[0]) {
+        formData.append('avatar', fileInputRef.current.files[0]);
+      }
+
+      await updateUser(formData);
       toast.success("Profile updated successfully");
       navigate(-1);
     } catch (error) {
@@ -68,6 +88,29 @@ function ProfileUpdateForm() {
           Update Profile
         </h2>
         <form onSubmit={handleSubmit(handleUpdate)}>
+          <div className="mb-6 flex flex-col items-center">
+            <div className="relative">
+              <img
+                src={avatarPreview || defaultAvatar}
+                alt="Avatar Preview"
+                className="w-24 h-24 rounded-full shadow-md object-cover"
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="absolute bottom-0 right-0 bg-blue-500 text-white p-2 rounded-full shadow-lg hover:bg-blue-600"
+              >
+                <FaCamera size={16} />
+              </button>
+            </div>
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept="image/*"
+              onChange={handleAvatarChange}
+              className="hidden"
+            />
+          </div>
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
