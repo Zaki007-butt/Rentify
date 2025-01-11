@@ -2,9 +2,12 @@ import { Link } from "react-router-dom";
 import { useGetUserUtilityBills } from "../../react-query/queries/utility-bill.queries";
 import Loader from "../../components/shared/Loader";
 import { formatDate } from "../../utilities/helpers";
+import UtilityBillPaymentForm from "../../components/forms/UtilityBillPaymentForm";
+import { useState } from "react";
 
 const UtilityBills = () => {
   const { data: bills, isLoading } = useGetUserUtilityBills();
+  const [selectedBill, setSelectedBill] = useState(null);
 
   if (isLoading) return <Loader />;
 
@@ -17,7 +20,7 @@ const UtilityBills = () => {
           <p className="p-4 text-gray-500">No utility bills found</p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+            <table className="min-w-full divide-y divide-gray-200 overflow-x-auto">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -92,6 +95,30 @@ const UtilityBills = () => {
                       {formatDate(bill.due_date)}
                     </td>
                     <td className="px-2 py-4 whitespace-nowrap">
+                      {!bill.paid_date ? (
+                        <UtilityBillPaymentForm
+                          bill={bill}
+                          onSuccess={() => setSelectedBill(null)}
+                        />
+                      ) : (
+                        <div className="flex flex-col gap-1">
+                          <span className="text-green-600 text-sm">
+                            Paid: Rs. {bill.paid_amount}
+                          </span>
+                          {bill.payment_receipt && (
+                            <a
+                              href={bill.payment_receipt}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:text-blue-800 text-sm"
+                            >
+                              View Receipt
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-2 py-4 whitespace-nowrap">
                       {bill.bill_image && (
                         <a
                           href={bill.bill_image}
@@ -114,4 +141,4 @@ const UtilityBills = () => {
   );
 };
 
-export default UtilityBills; 
+export default UtilityBills;

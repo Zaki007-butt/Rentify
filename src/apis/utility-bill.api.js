@@ -6,7 +6,11 @@ export const createUtilityBill = async (billData) => {
 };
 
 export const updateUtilityBill = async ({ id, data }) => {
-  const response = await api.patch(`/utility-bills/${id}/`, data);
+  const response = await api.patch(`/utility-bills/${id}/`, data, {
+    headers: {
+      'Content-Type': data instanceof FormData ? 'multipart/form-data' : 'application/json',
+    },
+  });
   return response.data;
 };
 

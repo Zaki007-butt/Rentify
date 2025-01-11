@@ -1,16 +1,15 @@
 import { useParams } from "react-router-dom";
 import { useGetUtilityBillsByAgreement } from "../../react-query/queries/utility-bill.queries";
-import { useUpdateUtilityBillMutation } from "../../react-query/mutations/utility-bill.mutation";
 import { formatDate } from "../../utilities/helpers";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import UtilityBillPaymentForm from "../../components/forms/UtilityBillPaymentForm";
 
 function UtilityBillsList() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: utilityBills } = useGetUtilityBillsByAgreement(id);
-  const updateUtilityBillMutation = useUpdateUtilityBillMutation();
-  const [billAmount, setBillAmount] = useState({});
+  const [selectedBill, setSelectedBill] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -62,65 +61,69 @@ function UtilityBillsList() {
                     </span>
                   </div>
                   <p className="text-sm text-gray-600">Amount: Rs. {bill.bill_amount}</p>
-                  {bill.paid_date && <p className="text-sm text-gray-600">Paid Amount: Rs. {bill.paid_amount}</p>}
-                  <p className="text-sm text-gray-600">Bill Date: {formatDate(bill.bill_date)}</p>
-                  <p className="text-sm text-gray-600">Due Date: {formatDate(bill.due_date)}</p>
-                  {bill.paid_date && <p className="text-sm text-gray-600">Paid Date: {formatDate(bill.paid_date)}</p>}
+                  {bill.paid_date && (
+                    <p className="text-sm text-gray-600">
+                      Paid Amount: Rs. {bill.paid_amount}
+                    </p>
+                  )}
+                  <p className="text-sm text-gray-600">
+                    Bill Date: {formatDate(bill.bill_date)}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Due Date: {formatDate(bill.due_date)}
+                  </p>
+                  {bill.paid_date && (
+                    <p className="text-sm text-gray-600">
+                      Paid Date: {formatDate(bill.paid_date)}
+                    </p>
+                  )}
                   <hr className="my-2" />
                   <p className="text-sm text-gray-600">
                     <span className="font-medium">For:</span>{" "}
-                    <Link to={`/admin/agreements/${bill.agreement_details.id}`} className="underline text-blue-600">
+                    <Link
+                      to={`/admin/agreements/${bill.agreement_details.id}`}
+                      className="underline text-blue-600"
+                    >
                       Agreement #{bill.agreement_details.id}
                     </Link>
                   </p>
                 </div>
 
-                {!bill.paid_date && (
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="number"
-                        step="0.01"
-                        placeholder="Enter amount"
-                        className="w-32 px-2 py-1 text-sm border rounded"
-                        onChange={(e) => {
-                          const amount = parseFloat(e.target.value);
-                          if (amount > 0) {
-                            setBillAmount((prevState) => ({
-                              ...prevState,
-                              [bill.id]: amount,
-                            }));
-                          }
-                        }}
-                      />
-                      <button
-                        onClick={() => {
-                          const amount = billAmount[bill.id];
-                          if (amount > 0) {
-                            updateUtilityBillMutation.mutate({
-                              id: bill.id,
-                              data: { paid_amount: amount },
-                            });
-                          }
-                        }}
-                        className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700"
-                      >
-                        Pay
-                      </button>
+                <div className="flex flex-col gap-4 items-end">
+                  {!bill.paid_date ? (
+                    <UtilityBillPaymentForm 
+                      bill={bill}
+                      onSuccess={() => setSelectedBill(null)}
+                    />
+                  ) : (
+                    <div className="flex flex-col gap-1">
+                      <span className="text-green-600 text-sm">
+                        Paid: Rs. {bill.paid_amount}
+                      </span>
+                      {bill.payment_receipt && (
+                        <a
+                          href={bill.payment_receipt}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 text-sm"
+                        >
+                          View Receipt
+                        </a>
+                      )}
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {bill.bill_image && (
-                  <a
-                    href={bill.bill_image}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 text-sm"
-                  >
-                    View Bill
-                  </a>
-                )}
+                  {bill.bill_image && (
+                    <a
+                      href={bill.bill_image}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 text-sm"
+                    >
+                      View Bill
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           ))
