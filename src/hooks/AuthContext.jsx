@@ -78,11 +78,13 @@ const AuthProvider = ({ children }) => {
 
   function signInUser(tokens) {
     if (tokens) {
-      setUser({
+      const userData = {
         payload: jwtDecode(tokens.access),
         access: tokens.access,
         refresh: tokens.refresh,
-      });
+      };
+      setUser(userData);
+      return userData.payload;
     } else {
       throw new Error("Cannot sign in user without token!");
     }
