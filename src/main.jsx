@@ -36,6 +36,7 @@ import UtilityBillForm from './pages/User/UtilityBillForm'
 import UserUtilityBills from './pages/Customer/UtilityBills'
 import PaymentsList from "./pages/User/PaymentsList";
 import UtilityBillsList from "./pages/User/UtilityBillsList";
+import Dashboard from './pages/Admin/Dashboard';
 
 export const queryClient = new QueryClient()
 const router = createBrowserRouter(createRoutesFromElements(
@@ -43,6 +44,7 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route index element={<Properties />} />
     <Route path="properties" element={<Properties />} />
     <Route path="admin" element={<Authenticated admin />}>
+      <Route path="dashboard" element={<Dashboard />} />
       <Route path="properties" element={<UserProperties />} />
       <Route path="properties/create" element={<PropertyForm />} />
       <Route path="properties/:id" element={<UserPropertyManage />} />

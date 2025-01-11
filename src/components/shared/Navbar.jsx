@@ -1,7 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faUser, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronDown,
+  faUser,
+  faSignOutAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Navbar = () => {
   const { user, signOutUser } = useAuth();
@@ -29,7 +33,7 @@ const Navbar = () => {
             <>
               <Link
                 type="button"
-                to="/user/profile"
+                to={user.is_admin ? "/admin/dashboard" : "/user/profile"}
                 className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition-all"
               >
                 <FontAwesomeIcon icon={faUser} className="mr-2" />

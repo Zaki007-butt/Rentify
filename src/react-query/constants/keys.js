@@ -12,6 +12,7 @@ export const QUERY_KEYS = {
   USER_PAYMENTS: 'user-payments',
   UTILITY_BILLS: 'utility-bills',
   CUSTOMER_UTILITY_BILLS: 'customer-utility-bills',
+  DASHBOARD_STATS: 'dashboard-stats',
 };
 
 // Constant declarations
