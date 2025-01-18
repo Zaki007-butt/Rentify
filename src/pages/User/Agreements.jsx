@@ -109,7 +109,6 @@ function Agreements() {
             // title="Properties List"
             columns={columns}
             data={tableData}
-            selectableRows
             direction="auto"
             fixedHeaderScrollHeight="300px"
             pagination

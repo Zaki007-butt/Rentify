@@ -98,7 +98,6 @@ function Customers() {
           <DataTable
             columns={columns}
             data={tableData}
-            selectableRows
             direction="auto"
             fixedHeaderScrollHeight="300px"
             pagination

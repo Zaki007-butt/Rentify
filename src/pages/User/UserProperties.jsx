@@ -128,7 +128,7 @@ function UserProperties() {
             // title="Properties List"
             columns={columns}
             data={tableData}
-            selectableRows
+            selectableRows={false}
             direction="auto"
             fixedHeaderScrollHeight="300px"
             pagination
