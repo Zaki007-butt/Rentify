@@ -46,8 +46,9 @@ function UserProperties() {
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
   let categoryID, subcategoryID, searchKeyword, type;
   const [searchParams] = useSearchParams();
-  const filterType = searchParams.get("filter");
+  const filterType = searchParams.get("filter") || "all";
   const filterValue = searchParams.get("value");
+  console.log("filterType", filterType);
   const { data: response, isPending } = useGetProperties(
     categoryID,
     subcategoryID,
