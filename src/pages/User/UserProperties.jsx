@@ -7,7 +7,12 @@ import FilterComponent from "../../components/TableFilter";
 import { PROPERTIES_PAGE_SIZE } from "../../react-query/constants/keys";
 
 const columns = [
-  
+  {
+    name: "ID",
+    selector: (row) => row.id,
+    sortable: true,
+  },
+
   {
     name: "Title",
     selector: (row) => row.title,
@@ -44,20 +49,36 @@ function UserProperties() {
   const [filterText, setFilterText] = useState("");
   const navigate = useNavigate();
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+  const [totalRows, setTotalRows] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10); // Default page size
+
   let categoryID, subcategoryID, searchKeyword, type;
   const [searchParams] = useSearchParams();
   const filterType = searchParams.get("filter") || "all";
   const filterValue = searchParams.get("value");
-  console.log("filterType", filterType);
+
   const { data: response, isPending } = useGetProperties(
     categoryID,
     subcategoryID,
     searchKeyword,
     type,
-    PROPERTIES_PAGE_SIZE,
+    perPage,
     filterType,
-    filterValue
+    filterValue,
+    currentPage
   );
+
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  // Handle per page change
+  const handlePerRowsChange = async (newPerPage, page) => {
+    setPerPage(newPerPage);
+    setCurrentPage(page);
+  };
 
   const subHeaderComponentMemo = useMemo(() => {
     const handleClear = () => {
@@ -81,7 +102,7 @@ function UserProperties() {
   };
 
   useEffect(() => {
-    if (!isPending && response?.data?.results?.length > 0) {
+    if (!isPending && response?.data) {
       setTableData(
         response.data.results.map((property) => ({
           id: property.id,
@@ -91,6 +112,7 @@ function UserProperties() {
           property_category_name: property.property_category_name,
         }))
       );
+      setTotalRows(response.data.count);
     }
   }, [response]);
 
@@ -119,21 +141,24 @@ function UserProperties() {
           Add Property
         </Link>
       </div>
-  
-      {/* Properties Content */}
+
       <div className="p-4">
-        {isPending ? (
-          <Loader />
-        ) : (
+        <>
           <DataTable
-            // title="Properties List"
             columns={columns}
             data={tableData}
             selectableRows={false}
             direction="auto"
             fixedHeaderScrollHeight="300px"
             pagination
+            paginationServer
+            paginationTotalRows={totalRows}
+            paginationRowsPerPageOptions={[10]}
+            onChangeRowsPerPage={handlePerRowsChange}
+            onChangePage={handlePageChange}
             responsive
+            progressPending={isPending}
+            progressComponent={<Loader />}
             subHeaderAlign="right"
             subHeaderWrap
             highlightOnHover
@@ -143,14 +168,10 @@ function UserProperties() {
             pointerOnHover
             onRowClicked={handleRowClick}
           />
-        )}
+        </>
       </div>
     </div>
   );
-  
 }
-
-
-
 
 export default UserProperties;

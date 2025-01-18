@@ -1,13 +1,14 @@
 import api from ".";
 
-export const getProperties = (
+export  const getProperties = (
   categoryID,
   subcategoryID,
   searchKeyword,
   type,
   pageSize,
   filterType,
-  filterValue
+  filterValue,
+  page = 1
 ) => {
   let params = {};
 
@@ -31,6 +32,9 @@ export const getProperties = (
     if (filterValue) {
       params["filter_value"] = filterValue;
     }
+  }
+  if (page) {
+    params["page"] = page;
   }
 
   const queryString = new URLSearchParams(params).toString();

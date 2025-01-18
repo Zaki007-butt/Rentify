@@ -12,12 +12,14 @@ export const useGetProperties = (
   type,
   pageSize,
   filterType,
-  filterValue
+  filterValue,
+  page
 ) => {
   return useQuery({
-    queryKey: ["properties", categoryId, typeId, searchKeyword, type, filterType, filterValue],
-    queryFn: () => getProperties(categoryId, typeId, searchKeyword, type, pageSize, filterType, filterValue),
-    staleTime: 20 * 1000
+    queryKey: ["properties", categoryId, typeId, searchKeyword, type, filterType, filterValue, page],
+    queryFn: () => getProperties(categoryId, typeId, searchKeyword, type, pageSize, filterType, filterValue, page),
+    staleTime: 20 * 1000,
+    keepPreviousData: true
   });
 };
 
