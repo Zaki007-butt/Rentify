@@ -73,7 +73,9 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route path="users/register" element={<Register />} />
     <Route path="users/login" element={<Login />} />
   </Route>
-))
+), {
+  basename: '/RealEstate-Frontend/',
+})
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
