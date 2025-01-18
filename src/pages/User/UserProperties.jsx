@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import { useGetProperties } from "../../react-query/queries/property.queries";
 import { useEffect, useState, useMemo } from "react";
@@ -45,12 +45,17 @@ function UserProperties() {
   const navigate = useNavigate();
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
   let categoryID, subcategoryID, searchKeyword, type;
+  const [searchParams] = useSearchParams();
+  const filterType = searchParams.get("filter");
+  const filterValue = searchParams.get("value");
   const { data: response, isPending } = useGetProperties(
     categoryID,
     subcategoryID,
     searchKeyword,
     type,
-    PROPERTIES_PAGE_SIZE
+    PROPERTIES_PAGE_SIZE,
+    filterType,
+    filterValue
   );
 
   const subHeaderComponentMemo = useMemo(() => {

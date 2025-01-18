@@ -1,6 +1,6 @@
 import api from ".";
 
-export const getProperties = (categoryID, subcategoryID, searchKeyword, type, pageSize) => {
+export const getProperties = (categoryID, subcategoryID, searchKeyword, type, pageSize, filterType, filterValue) => {
   let params = {};
 
   if (categoryID) {
@@ -15,13 +15,21 @@ export const getProperties = (categoryID, subcategoryID, searchKeyword, type, pa
   if (pageSize) {
     params["page_size"] = pageSize;
   }
-  if (type) params["type"] = type;
+  if (type) {
+    params["type"] = type;
+  }
+  if (filterType && filterValue) {
+    params["filter_type"] = filterType;
+    params["filter_value"] = filterValue;
+  }
 
   const queryString = new URLSearchParams(params).toString();
   const URL = `/properties/?${queryString}`;
 
   return api.get(URL);
 };
+
+
 export const getPropertiesCategories = async () => {
   const { data } = await api.get(`/categories/`);
   return data;

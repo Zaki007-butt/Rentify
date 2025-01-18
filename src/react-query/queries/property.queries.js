@@ -3,14 +3,23 @@ import {
 } from '@tanstack/react-query'
 import { getProperties, getPropertiesCategories, getPropertiesCategoryTypes, getSingleProperty } from '../../apis/property.api'
 import { QUERY_KEYS } from '../constants/keys'
+import axios from 'axios'
 
-export const useGetProperties = (categoryID, subcategoryID, searchKeyword, type, pageSize = 100) => {
+export const useGetProperties = (
+  categoryId,
+  typeId,
+  searchKeyword,
+  type,
+  pageSize,
+  filterType,
+  filterValue
+) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.PROPERTIES, categoryID, subcategoryID, searchKeyword, type, pageSize],
-    queryFn: () => getProperties(categoryID, subcategoryID, searchKeyword, type, pageSize),
+    queryKey: ["properties", categoryId, typeId, searchKeyword, type, filterType, filterValue],
+    queryFn: () => getProperties(categoryId, typeId, searchKeyword, type, pageSize, filterType, filterValue),
     staleTime: 20 * 1000
-  })
-}
+  });
+};
 
 export const useGetPropertiesCategories = () => {
   return useQuery({
