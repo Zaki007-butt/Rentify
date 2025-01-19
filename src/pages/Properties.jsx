@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropertyCard from "../components/cards/PropertyCard";
 import {
   useGetProperties,
@@ -23,14 +23,54 @@ const Properties = () => {
   const [searchKeyword, setSearchKeyword] = useState(
     searchParams.get("search") || ""
   );
-  const { data: response, isPending } = useGetProperties(
+  const [currentPage, setCurrentPage] = useState(1);
+  const [allProperties, setAllProperties] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const pageSize = 12; // Number of items per page
+
+  const {
+    data: response,
+    isPending,
+    isFetching,
+  } = useGetProperties(
     categoryID,
     subcategoryID,
     searchKeyword,
-    searchParams.get("type")
+    searchParams.get("type"),
+    pageSize,
+    null,
+    null,
+    currentPage
   );
+
   const { data: categories } = useGetPropertiesCategories();
   const { data: subcategories } = useGetPropertyTypesQuery(categoryID);
+
+  // Update properties when response changes
+  useEffect(() => {
+    if (response?.data) {
+      if (currentPage === 1) {
+        setAllProperties(response.data.results);
+      } else {
+        setAllProperties((prev) => [...prev, ...response.data.results]);
+      }
+      // Check if there are more pages
+      setHasMore(response.data.next !== null);
+    }
+  }, [response, currentPage]);
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+    setAllProperties([]);
+    setHasMore(true);
+  }, [categoryID, subcategoryID, searchKeyword, searchParams.get("type")]);
+
+  const handleLoadMore = () => {
+    if (!isFetching && hasMore) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
 
   const updateCategoryId = (ID) => {
     if (ID) {
@@ -151,29 +191,47 @@ const Properties = () => {
           </div>
         )}
       </div>
-      {response?.data?.results?.length > 0 ? (
-        <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {response.data.results.map((property) => (
-            <Link to={`/properties/${property.id}`} key={property.id}>
-              <PropertyCard
-                id={property.id}
-                title={property.title}
-                description={property.description}
-                price={property.price}
-                address={property.address}
-                bedroom={property.bedroom}
-                washroom={property.washroom}
-                area={property.area}
-                property_category_name={property.property_category_name}
-                rent_or_buy={property.rent_or_buy}
-                images={property.images}
-              />
-            </Link>
-          ))}
-        </div>
+      {allProperties.length > 0 ? (
+        <>
+          <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {allProperties.map((property) => (
+              <Link to={`/properties/${property.id}`} key={property.id}>
+                <PropertyCard
+                  id={property.id}
+                  title={property.title}
+                  description={property.description}
+                  price={property.price}
+                  address={property.address}
+                  bedroom={property.bedroom}
+                  washroom={property.washroom}
+                  area={property.area}
+                  property_category_name={property.property_category_name}
+                  rent_or_buy={property.rent_or_buy}
+                  images={property.images}
+                />
+              </Link>
+            ))}
+          </div>
+
+          {/* Load More Button */}
+          {hasMore && (
+            <div className="flex justify-center mt-8">
+              <button
+                onClick={handleLoadMore}
+                disabled={isFetching}
+                className={
+                  "px-6 py-3 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 disabled:opacity-50"
+                }
+              >
+                {isFetching ? "Loading..." : "Load More"}
+              </button>
+            </div>
+          )}
+        </>
       ) : (
-        <NoData />
+        !isPending && <NoData />
       )}
+
       {isPending && <Loader />}
     </div>
   );
