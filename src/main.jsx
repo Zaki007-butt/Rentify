@@ -39,6 +39,12 @@ import UtilityBillsList from "./pages/User/UtilityBillsList";
 import Dashboard from './pages/Admin/Dashboard';
 
 export const queryClient = new QueryClient()
+
+let basename = '/';
+if (import.meta.env.NODE_ENV === 'production') {
+  basename = '/RealEstate-Frontend/';
+}
+
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/" element={<RootLayout />}>
     <Route index element={<Properties />} />
@@ -73,9 +79,7 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route path="users/register" element={<Register />} />
     <Route path="users/login" element={<Login />} />
   </Route>
-), {
-  basename: '/RealEstate-Frontend/',
-})
+), { basename })
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
