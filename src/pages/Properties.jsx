@@ -32,6 +32,7 @@ const Properties = () => {
     data: response,
     isPending,
     isFetching,
+    refetch
   } = useGetProperties(
     categoryID,
     subcategoryID,
@@ -64,6 +65,7 @@ const Properties = () => {
     setCurrentPage(1);
     setAllProperties([]);
     setHasMore(true);
+    refetch();
   }, [categoryID, subcategoryID, searchKeyword, searchParams.get("type")]);
 
   const handleLoadMore = () => {
